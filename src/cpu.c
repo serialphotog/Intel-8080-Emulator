@@ -42,14 +42,6 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset)
 	fclose(f);
 }
 
-// Performs a MVI B, D8 Instruction
-// B <- byte 2
-void mvi_b(CPUState *state, unsigned char *opcode)
-{
-	state->b = opcode[1];
-	state->pc++;
-}
-
 // Performs a MVI instruction
 void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode)
 {
@@ -61,6 +53,12 @@ void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode)
 void jmp(CPUState *state, unsigned char *opcode) 
 {
 	state->pc = (opcode[2] << 8) | opcode[1];
+}
+
+void lxi(uint16_t *reg, uint16_t *pc, unsigned char * opcode)
+{
+	*reg = (opcode[2] << 8) | opcode[1];
+	*pc += 2;
 }
 
 // LXI SP, D16

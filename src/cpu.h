@@ -44,6 +44,7 @@ void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode);
 void jmp(CPUState *state, unsigned char *opcode);
 
 // perfroms an lxi instruction on the SP register
+void lxi(uint16_t *reg, uint16_t *pc, unsigned char * opcode);
 void lxi_sp(CPUState *state, unsigned char *opcode);
 
 #endif

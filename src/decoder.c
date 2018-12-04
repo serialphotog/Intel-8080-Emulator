@@ -205,7 +205,7 @@ int decode(CPUState *state)
 			break;
 		case 0x31:
 			// LXI SP, D16
-			lxi_sp(state, opcode);
+			lxi(&state->sp, &state->pc, opcode);
 			break;
 		case 0x32:
 			// STA adr
