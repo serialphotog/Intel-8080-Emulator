@@ -25,7 +25,7 @@ int decode(CPUState *state)
 		case 0xdd:
 		case 0xed:
 		case 0xfd:
-			unimplementedInstruction(state);
+			// NOP
 			break;
 		case 0x01:
 			unimplementedInstruction(state);
@@ -586,7 +586,7 @@ int decode(CPUState *state)
 			unimplementedInstruction(state);
 			break;
 		case 0xc0:
-			printf("RNZ");
+			unimplementedInstruction(state);
 			break;
 		case 0xc1:
 			unimplementedInstruction(state);
@@ -768,7 +768,7 @@ int decode(CPUState *state)
 			break;
 	}
 
-	state->pc += 1;
+	return 0;
 }
 
 // Gets called when an unimplemented instruction is encountered
