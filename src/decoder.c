@@ -105,7 +105,7 @@ int decode(CPUState *state)
 			break;
 		case 0x16:
 			// MVI D, D8
-			unimplementedInstruction(state);
+			mvi(&state->d, &state->pc, opcode);
 			break;
 		case 0x17:
 			// RAL
@@ -133,7 +133,7 @@ int decode(CPUState *state)
 			break;
 		case 0x1e:
 			// MVI E, D8
-			unimplementedInstruction(state);
+			mvi(&state->e, &state->pc, opcode);
 			break;
 		case 0x1f:
 			// RAR
@@ -165,7 +165,7 @@ int decode(CPUState *state)
 			break;
 		case 0x26:
 			// MVI H, D8
-			unimplementedInstruction(state);
+			mvi(&state->h, &state->pc, opcode);
 			break;
 		case 0x27:
 			// DAA
@@ -193,7 +193,7 @@ int decode(CPUState *state)
 			break;
 		case 0x2e:
 			// MVI L, D8
-			unimplementedInstruction(state);
+			mvi(&state->l, &state->pc, opcode);
 			break;
 		case 0x2f:
 			// CMA
@@ -253,7 +253,7 @@ int decode(CPUState *state)
 			break;
 		case 0x3e:
 			// MVI A, D8
-			unimplementedInstruction(state);
+			mvi(&state->a, &state->pc, opcode);
 			break;
 		case 0x3f:
 			// CMC
