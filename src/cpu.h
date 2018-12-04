@@ -38,6 +38,9 @@ void runCPU(CPUState *state);
 // Read a binary file into memory
 void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 
+// Performs a MVI B, D8 Instruction
+void mvi_b(CPUState *state, unsigned char *opcode);
+
 // Performs a JMP operation
 void jmp(CPUState *state, unsigned char *opcode);
 

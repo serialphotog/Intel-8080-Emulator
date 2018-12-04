@@ -42,6 +42,14 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset)
 	fclose(f);
 }
 
+// Performs a MVI B, D8 Instruction
+// B <- byte 2
+void mvi_b(CPUState *state, unsigned char *opcode)
+{
+	state->b = opcode[1];
+	state->pc++;
+}
+
 // JMP adr
 void jmp(CPUState *state, unsigned char *opcode) 
 {

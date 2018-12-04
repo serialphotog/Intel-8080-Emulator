@@ -49,7 +49,7 @@ int decode(CPUState *state)
 			break;
 		case 0x06:
 			// MVI B, D8
-			unimplementedInstruction(state);
+			mvi_b(state, opcode);
 			break;
 		case 0x07:
 			// RLC
