@@ -41,3 +41,8 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset)
 	fread(buffer, fsize, 1, f);
 	fclose(f);
 }
+
+void jmp(CPUState *state, unsigned char *opcode) 
+{
+	state->pc = (opcode[2] << 8) | opcode[1];
+}

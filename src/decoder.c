@@ -785,7 +785,7 @@ int decode(CPUState *state)
 			break;
 		case 0xc3:
 			// JMP adr
-			unimplementedInstruction(state);
+			jmp(state, opcode);
 			break;
 		case 0xc4:
 			// CNZ adr
