@@ -50,6 +50,13 @@ void mvi_b(CPUState *state, unsigned char *opcode)
 	state->pc++;
 }
 
+// Performs a MVI instruction
+void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode)
+{
+	*reg = opcode[1];
+	*pc++;
+}
+
 // JMP adr
 void jmp(CPUState *state, unsigned char *opcode) 
 {

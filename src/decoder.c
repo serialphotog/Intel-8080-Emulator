@@ -49,7 +49,7 @@ int decode(CPUState *state)
 			break;
 		case 0x06:
 			// MVI B, D8
-			mvi_b(state, opcode);
+			mvi(&state->b, &state->pc, opcode);
 			break;
 		case 0x07:
 			// RLC
