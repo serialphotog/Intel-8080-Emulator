@@ -41,4 +41,7 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 // Performs a JMP operation
 void jmp(CPUState *state, unsigned char *opcode);
 
+// perfroms an lxi instruction on the SP register
+void lxi_sp(CPUState *state, unsigned char *opcode);
+
 #endif

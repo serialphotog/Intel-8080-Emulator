@@ -42,7 +42,16 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset)
 	fclose(f);
 }
 
+// JMP adr
 void jmp(CPUState *state, unsigned char *opcode) 
 {
 	state->pc = (opcode[2] << 8) | opcode[1];
+}
+
+// LXI SP, D16
+// SP.hi <- byte 3, SP.lo <- byte 2
+void lxi_sp(CPUState *state, unsigned char *opcode)
+{
+	state->sp = (opcode[2] << 8) | opcode[1];
+	state->pc += 2;
 }

@@ -205,7 +205,7 @@ int decode(CPUState *state)
 			break;
 		case 0x31:
 			// LXI SP, D16
-			unimplementedInstruction(state);
+			lxi_sp(state, opcode);
 			break;
 		case 0x32:
 			// STA adr
