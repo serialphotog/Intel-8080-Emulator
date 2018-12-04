@@ -70,3 +70,17 @@ void lxi(uint16_t *reg, uint16_t *pc, unsigned char * opcode)
 	*reg = (opcode[2] << 8) | opcode[1];
 	*pc += 2;
 }
+
+// Performs a CALL instruction
+// (SP-1) <- PC.hi
+// (SP-2) <- PC.lo
+// SP <- SP + 2
+// PC = adr
+void call(CPUState *state, unsigned char *opcode)
+{
+	uint16_t ret = state->pc + 2;
+	state->memory[state->sp - 1] = (ret >> 8) & 0xff;
+	state->memory[state->sp - 2] = (ret & 0xff);
+	state->sp = state->sp - 2;
+	state->pc = (opcode[2] << 8) | opcode[1];
+}

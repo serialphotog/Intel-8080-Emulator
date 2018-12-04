@@ -821,7 +821,7 @@ int decode(CPUState *state)
 			break;
 		case 0xcd:
 			// CALL adr
-			unimplementedInstruction(state);
+			call(state, opcode);
 			break;
 		case 0xce:
 			// ACI D8

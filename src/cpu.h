@@ -50,4 +50,7 @@ void jmp(CPUState *state, unsigned char *opcode);
 // perfroms an lxi instruction
 void lxi(uint16_t *reg, uint16_t *pc, unsigned char * opcode);
 
+// Performs a CALL instruction
+void call(CPUState *state, unsigned char *opcode);
+
 #endif
