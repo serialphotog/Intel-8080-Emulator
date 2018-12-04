@@ -225,7 +225,7 @@ int decode(CPUState *state)
 			break;
 		case 0x36:
 			// MVI M, D8
-			unimplementedInstruction(state);
+			mvi_m(state, opcode);
 			break;
 		case 0x37:
 			// STC

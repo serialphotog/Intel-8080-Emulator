@@ -49,6 +49,15 @@ void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode)
 	*pc++;
 }
 
+// Performs an MVI M
+void mvi_m(CPUState *state, unsigned char *opcode)
+{
+	// Calculate the memory offset
+	uint16_t offs = (state->h << 8) | state->l;
+	state->memory[offs] = opcode[1];
+	state->pc++;
+}
+
 // JMP adr
 void jmp(CPUState *state, unsigned char *opcode) 
 {
