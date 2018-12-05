@@ -53,6 +53,9 @@ void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char *opcode);
 // Performs an lxi instruction on a 8-bit register.
 void lxi_8(uint8_t *reg, uint16_t *pc, unsigned char *opcode);
 
+// Performs an LDAX instruction
+void ldax(uint8_t *reg, uint8_t *src, uint8_t *memory, unsigned char *opcode);
+
 // Performs a CALL instruction
 void call(CPUState *state, unsigned char *opcode);
 

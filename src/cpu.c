@@ -98,3 +98,11 @@ void call(CPUState *state, unsigned char *opcode)
 	state->sp = state->sp - 2;
 	state->pc = (opcode[2] << 8) | opcode[1];
 }
+
+// Performs a LDAX instruction
+//		REGISTER <- (*reg << 8 | src)
+void ldax(uint8_t *reg, uint8_t *src, uint8_t *memory, unsigned char *opcode)
+{
+	uint16_t offs = (*reg << 8) | *src;
+	*reg = memory[offs];
+}
