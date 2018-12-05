@@ -59,4 +59,13 @@ void ldax(uint8_t *reg, uint8_t *src, uint8_t *memory, unsigned char *opcode);
 // Performs a CALL instruction
 void call(CPUState *state, unsigned char *opcode);
 
+// Performs a MOV from register to register
+void mov_r2r(uint8_t *dest, uint8_t *src, unsigned char *opcode);
+
+// Performs a move from register to memory
+void mov_r2m(uint8_t *memory, uint8_t *src, uint8_t *h, uint8_t *l, unsigned char *opcode);
+
+// performs a move from memory to register
+void mov_m2r(uint8_t *memory, uint8_t *dest, uint8_t *h, uint8_t *l, unsigned char *opcode);
+
 #endif

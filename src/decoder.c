@@ -261,259 +261,259 @@ int decode(CPUState *state)
 			break;
 		case 0x40:
 			// MOV B, B
-			unimplementedInstruction(state);
+			mov_r2r(&state->b, &state->b, opcode);
 			break;
 		case 0x41:
 			// MOV B, C
-			unimplementedInstruction(state);
+			mov_r2r(&state->b, &state->c, opcode);
 			break;
 		case 0x42:
 			// MOV B, D
-			unimplementedInstruction(state);
+			mov_r2r(&state->b, &state->d, opcode);
 			break;
 		case 0x43:
 			// MOV B, E
-			unimplementedInstruction(state);
+			mov_r2r(&state->b, &state->e, opcode);
 			break;
 		case 0x44:
 			// MOV B, H
-			unimplementedInstruction(state);
+			mov_r2r(&state->b, &state->h, opcode);
 			break;
 		case 0x45:
 			// MOV B, L
-			unimplementedInstruction(state);
+			mov_r2r(&state->b, &state->l, opcode);
 			break;
 		case 0x46:
 			// MOV B, M
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->b, &state->h, &state->l, opcode);
 			break;
 		case 0x47:
 			// MOV B, A
-			unimplementedInstruction(state);
+			mov_r2r(&state->b, &state->a, opcode);
 			break;
 		case 0x48:
 			// MOV C, B
-			unimplementedInstruction(state);
+			mov_r2r(&state->c, &state->b, opcode);
 			break;
 		case 0x49:
 			// MOV C, C
-			unimplementedInstruction(state);
+			mov_r2r(&state->c, &state->c, opcode);
 			break;
 		case 0x4a:
 			// MOV C, D
-			unimplementedInstruction(state);
+			mov_r2r(&state->c, &state->d, opcode);
 			break;
 		case 0x4b:
 			// MOV C, E
-			unimplementedInstruction(state);
+			mov_r2r(&state->c, &state->e, opcode);
 			break;
 		case 0x4c:
 			// MOV C, H
-			unimplementedInstruction(state);
+			mov_r2r(&state->c, &state->h, opcode);
 			break;
 		case 0x4d:
 			// MOV C, L
-			unimplementedInstruction(state);
+			mov_r2r(&state->c, &state->l, opcode);
 			break;
 		case 0x4e:
 			// MOV C, M
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->c, &state->h, &state->l, opcode);
 			break;
 		case 0x4f:
 			// MOV C, A
-			unimplementedInstruction(state);
+			mov_r2r(&state->c, &state->a, opcode);
 			break;
 		case 0x50:
 			// MOV D, B
-			unimplementedInstruction(state);
+			mov_r2r(&state->d, &state->b, opcode);
 			break;
 		case 0x51:
 			// MOV D, C
-			unimplementedInstruction(state);
+			mov_r2r(&state->d, &state->c, opcode);
 			break;
 		case 0x52:
 			// MOV D, D
-			unimplementedInstruction(state);
+			mov_r2r(&state->d, &state->d, opcode);
 			break;
 		case 0x53:
 			// MOV D, E
-			unimplementedInstruction(state);
+			mov_r2r(&state->d, &state->e, opcode);
 			break;
 		case 0x54:
 			// MOV D, H
-			unimplementedInstruction(state);
+			mov_r2r(&state->d, &state->h, opcode);
 			break;
 		case 0x55:
 			// MOV D, L
-			unimplementedInstruction(state);
+			mov_r2r(&state->d, &state->l, opcode);
 			break;
 		case 0x56:
 			// MOV D, M
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->d, &state->h, &state->l, opcode);
 			break;
 		case 0x57:
 			// MOV D, A
-			unimplementedInstruction(state);
+			mov_r2r(&state->d, &state->a, opcode);
 			break;
 		case 0x58:
 			// MOV E, B
-			unimplementedInstruction(state);
+			mov_r2r(&state->e, &state->b, opcode);
 			break;
 		case 0x59:
 			// MOV E, C
-			unimplementedInstruction(state);
+			mov_r2r(&state->e, &state->c, opcode);
 			break;
 		case 0x5a:
 			// MOV E, D
-			unimplementedInstruction(state);
+			mov_r2r(&state->e, &state->d, opcode);
 			break;
 		case 0x5b:
 			// MOV E, E
-			unimplementedInstruction(state);
+			mov_r2r(&state->e, &state->e, opcode);
 			break;
 		case 0x5c:
 			// MOV E, H
-			unimplementedInstruction(state);
+			mov_r2r(&state->e, &state->h, opcode);
 			break;
 		case 0x5d:
 			// MOV E, L
-			unimplementedInstruction(state);
+			mov_r2r(&state->e, &state->l, opcode);
 			break;
 		case 0x5e:
 			// MOV E, M
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->e, &state->h, &state->l, opcode);
 			break;
 		case 0x5f:
 			// MOV E, A
-			unimplementedInstruction(state);
+			mov_r2r(&state->e, &state->a, opcode);
 			break;
 		case 0x60:
 			// MOV H, B
-			unimplementedInstruction(state);
+			mov_r2r(&state->h, &state->b, opcode);
 			break;
 		case 0x61:
 			// MOV H, C
-			unimplementedInstruction(state);
+			mov_r2r(&state->h, &state->c, opcode);
 			break;
 		case 0x62:
 			// MOV H, D
-			unimplementedInstruction(state);
+			mov_r2r(&state->h, &state->d, opcode);
 			break;
 		case 0x63:
 			// MOV H, E
-			unimplementedInstruction(state);
+			mov_r2r(&state->h, &state->e, opcode);
 			break;
 		case 0x64:
 			// MOV H, H
-			unimplementedInstruction(state);
+			mov_r2r(&state->h, &state->h, opcode);
 			break;
 		case 0x65:
 			// MOV H, L
-			unimplementedInstruction(state);
+			mov_r2r(&state->h, &state->l, opcode);
 			break;
 		case 0x66:
 			// MOV H, M
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->h, &state->h, &state->l, opcode);
 			break;
 		case 0x67:
 			// MOV H, A
-			unimplementedInstruction(state);
+			mov_r2r(&state->h, &state->a, opcode);
 			break;
 		case 0x68:
 			// MOV L, B
-			unimplementedInstruction(state);
+			mov_r2r(&state->l, &state->b, opcode);
 			break;
 		case 0x69:
 			// MOV L, C
-			unimplementedInstruction(state);
+			mov_r2r(&state->l, &state->c, opcode);
 			break;
 		case 0x6a:
 			// MOV L, D
-			unimplementedInstruction(state);
+			mov_r2r(&state->l, &state->d, opcode);
 			break;
 		case 0x6b:
 			// MOV L, E
-			unimplementedInstruction(state);
+			mov_r2r(&state->l, &state->e, opcode);
 			break;
 		case 0x6c:
 			// MOV L, H
-			unimplementedInstruction(state);
+			mov_r2r(&state->l, &state->h, opcode);
 			break;
 		case 0x6d:
 			// MOV L, L
-			unimplementedInstruction(state);
+			mov_r2r(&state->l, &state->l, opcode);
 			break;
 		case 0x6e:
 			// MOV L, M
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->l, &state->h, &state->l, opcode);
 			break;
 		case 0x6f:
 			// MOV L, A
-			unimplementedInstruction(state);
+			mov_r2r(&state->l, &state->a, opcode);
 			break;
 		case 0x70:
 			// MOV M, B
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->b, &state->h, &state->l, opcode);
 			break;
 		case 0x71:
 			// MOV M, C
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->c, &state->h, &state->l, opcode);
 			break;
 		case 0x72:
 			// MOV M, D
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->d, &state->h, &state->l, opcode);
 			break;
 		case 0x73:
 			// MOV M, E
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->e, &state->h, &state->l, opcode);
 			break;
 		case 0x74:
 			// MOV M, H
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->h, &state->h, &state->l, opcode);
 			break;
 		case 0x75:
 			// MOV M, L
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->l, &state->h, &state->l, opcode);
 			break;
 		case 0x76:
-			// MOV M, M
+			// HLT
 			unimplementedInstruction(state);
 			break;
 		case 0x77:
 			// MOV M, A
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->a, &state->h, &state->l, opcode);
 			break;
 		case 0x78:
 			// MOV A, B
-			unimplementedInstruction(state);
+			mov_r2r(&state->a, &state->b, opcode);
 			break;
 		case 0x79:
 			// MOV A, C
-			unimplementedInstruction(state);
+			mov_r2r(&state->a, &state->c, opcode);
 			break;
 		case 0x7a:
 			// MOV A, D
-			unimplementedInstruction(state);
+			mov_r2r(&state->a, &state->d, opcode);
 			break;
 		case 0x7b:
 			// MOV A, E
-			unimplementedInstruction(state);
+			mov_r2r(&state->a, &state->e, opcode);
 			break;
 		case 0x7c:
 			// MOV A, H
-			unimplementedInstruction(state);
+			mov_r2r(&state->a, &state->h, opcode);
 			break;
 		case 0x7d:
 			// MOV A, L
-			unimplementedInstruction(state);
+			mov_r2r(&state->a, &state->l, opcode);
 			break;
 		case 0x7e:
 			// MOV A, M
-			unimplementedInstruction(state);
+			mov_m2r(state->memory, &state->a, &state->h, &state->l, opcode);
 			break;
 		case 0x7f:
 			// MOV A, A
-			unimplementedInstruction(state);
+			mov_r2r(&state->a, &state->a, opcode);
 			break;
 		case 0x80:
 			// ADD B

@@ -60,6 +60,29 @@ void mvi_m(CPUState *state, unsigned char *opcode)
 	state->pc++;
 }
 
+// Performs a MOV instructions
+//		dest <- src
+void mov_r2r(uint8_t *dest, uint8_t *src, unsigned char *opcode)
+{
+	*dest = *src;
+}
+
+// Performs a move from register to memory
+//		(HL) <- src
+void mov_r2m(uint8_t *memory, uint8_t *src, uint8_t *h, uint8_t *l, unsigned char *opcode)
+{
+	uint16_t offs = (*h << 8) | *l;
+	memory[offs] = *src;
+}
+
+// performs a move from memory to register
+//		dest <- HL
+void mov_m2r(uint8_t *memory, uint8_t *dest, uint8_t *h, uint8_t *l, unsigned char *opcode)
+{
+	uint16_t offs = (*h << 8) | *l;
+	*dest = memory[offs];
+}
+
 // JMP adr
 //		PC <- addr
 void jmp(CPUState *state, unsigned char *opcode) 
