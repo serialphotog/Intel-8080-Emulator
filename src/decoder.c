@@ -29,7 +29,7 @@ int decode(CPUState *state)
 			break;
 		case 0x01:
 			// LXI B, D16
-			unimplementedInstruction(state);
+			lxi_8(&state->b, &state->pc, opcode);
 			break;
 		case 0x02:
 			// STAX B
@@ -85,7 +85,7 @@ int decode(CPUState *state)
 			break;
 		case 0x11:
 			// LXI D, D16
-			unimplementedInstruction(state);
+			lxi_8(&state->d, &state->pc, opcode);
 			break;
 		case 0x12:
 			// STAX D
@@ -145,7 +145,7 @@ int decode(CPUState *state)
 			break;
 		case 0x21:
 			// LXI H, D16
-			unimplementedInstruction(state);
+			lxi_8(&state->h, &state->pc, opcode);
 			break;
 		case 0x22:
 			// SHLD adr
@@ -205,7 +205,7 @@ int decode(CPUState *state)
 			break;
 		case 0x31:
 			// LXI SP, D16
-			lxi(&state->sp, &state->pc, opcode);
+			lxi_16(&state->sp, &state->pc, opcode);
 			break;
 		case 0x32:
 			// STA adr

@@ -23,7 +23,7 @@ void runCPU(CPUState *state)
 	}
 }
 
-// Read a binary file into memory
+// Reads a binary file into memory
 void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset)
 {
 	FILE *f = fopen(file, "rb");
@@ -43,13 +43,15 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset)
 }
 
 // Performs a MVI instruction
+//		REGSITER <- byte 2
 void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode)
 {
 	*reg = opcode[1];
 	*pc++;
 }
 
-// Performs an MVI M
+// Performs an MVI from memory
+//		(HL) <- byte 2
 void mvi_m(CPUState *state, unsigned char *opcode)
 {
 	// Calculate the memory offset
@@ -59,13 +61,25 @@ void mvi_m(CPUState *state, unsigned char *opcode)
 }
 
 // JMP adr
+//		PC <- addr
 void jmp(CPUState *state, unsigned char *opcode) 
 {
 	state->pc = (opcode[2] << 8) | opcode[1];
 }
 
-// Performs an LXI instruction
-void lxi(uint16_t *reg, uint16_t *pc, unsigned char * opcode)
+// Performs an LXI instruction on a 16-bit register
+//		REGISTER.hi <- byte 3
+//		REGISTER.lo <- byte 2
+void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char * opcode)
+{
+	*reg = (opcode[2] << 8) | opcode[1];
+	*pc += 2;
+}
+
+// Performs an LXI instruction on a 8-bit register
+//		REGISTER.hi <- byte 3
+//		REGISTER.lo <- byte 2
+void lxi_8(uint8_t *reg, uint16_t *pc, unsigned char * opcode)
 {
 	*reg = (opcode[2] << 8) | opcode[1];
 	*pc += 2;

@@ -41,14 +41,17 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 // Performs an MVI instruction
 void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode);
 
-// Performs an MVI M
+// Performs an MVI from memory
 void mvi_m(CPUState *state, unsigned char *opcode);
 
 // Performs a JMP operation
 void jmp(CPUState *state, unsigned char *opcode);
 
-// perfroms an lxi instruction
-void lxi(uint16_t *reg, uint16_t *pc, unsigned char * opcode);
+// Prfroms an lxi instruction on a 16-bit register
+void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char *opcode);
+
+// Performs an lxi instruction on a 8-bit register.
+void lxi_8(uint8_t *reg, uint16_t *pc, unsigned char *opcode);
 
 // Performs a CALL instruction
 void call(CPUState *state, unsigned char *opcode);
