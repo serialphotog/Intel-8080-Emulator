@@ -50,6 +50,9 @@ void mvi_m(CPUState *state, unsigned char *opcode);
 // Performs a JMP operation
 void jmp(CPUState *state, unsigned char *opcode);
 
+// Performs a JNZ operation
+void jnz(CPUState *state, unsigned char *opcode);
+
 // Prfroms an lxi instruction on a 16-bit register
 void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char *opcode);
 

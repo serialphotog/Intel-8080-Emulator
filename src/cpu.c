@@ -122,6 +122,21 @@ void jmp(CPUState *state, unsigned char *opcode)
 	state->pc = (opcode[2] << 8) | opcode[1];
 }
 
+// JNZ addr
+//		if Z != 0 then
+//			PC <- addr
+void jnz(CPUState *state, unsigned char *opcode)
+{
+	if (state->cc.z == 0) 
+	{
+		state->pc = (opcode[2] << 8) | opcode[1];
+	} 
+	else 
+	{
+		state->pc += 2;
+	}
+}
+
 // Performs an LXI instruction on a 16-bit register
 //		REGISTER.hi <- byte 3
 //		REGISTER.lo <- byte 2
