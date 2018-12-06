@@ -61,7 +61,7 @@ int decode(CPUState *state)
 			break;
 		case 0x0a:
 			// LDAX B
-			ldax(&state->b, &state->c, state->memory, opcode);
+			ldax(&state->a, &state->b, &state->c, state->memory, opcode);
 			break;
 		case 0x0b:
 			// DCX B
@@ -117,7 +117,7 @@ int decode(CPUState *state)
 			break;
 		case 0x1a:
 			// LDAX D
-			ldax(&state->d, &state->e, state->memory, opcode);
+			ldax(&state->a, &state->d, &state->e, state->memory, opcode);
 			break;
 		case 0x1b:
 			// DCX D

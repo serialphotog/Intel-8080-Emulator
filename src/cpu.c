@@ -138,9 +138,9 @@ void call(CPUState *state, unsigned char *opcode)
 }
 
 // Performs a LDAX instruction
-//		REGISTER <- (*reg << 8 | src)
-void ldax(uint8_t *reg, uint8_t *src, uint8_t *memory, unsigned char *opcode)
+//		A <- (*hi << 8 | lo)
+void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory, unsigned char *opcode)
 {
-	uint16_t offs = (*reg << 8) | *src;
-	*reg = memory[offs];
+	uint16_t offs = (*hi << 8) | *lo;
+	*a = memory[offs];
 }
