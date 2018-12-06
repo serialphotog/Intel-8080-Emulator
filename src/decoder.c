@@ -45,7 +45,7 @@ int decode(CPUState *state)
 			break;
 		case 0x05:
 			// DCR B
-			unimplementedInstruction(state);
+			dcr(state, &state->b, opcode);
 			break;
 		case 0x06:
 			// MVI B, D8
@@ -73,7 +73,7 @@ int decode(CPUState *state)
 			break;
 		case 0x0d:
 			// DCR C
-			unimplementedInstruction(state);
+			dcr(state, &state->c, opcode);
 			break;
 		case 0x0e:
 			// MVI C, D8
@@ -101,7 +101,7 @@ int decode(CPUState *state)
 			break;
 		case 0x15:
 			// DCR D
-			unimplementedInstruction(state);
+			dcr(state, &state->d, opcode);
 			break;
 		case 0x16:
 			// MVI D, D8
@@ -129,7 +129,7 @@ int decode(CPUState *state)
 			break;
 		case 0x1d:
 			// DCR E
-			unimplementedInstruction(state);
+			dcr(state, &state->e, opcode);
 			break;
 		case 0x1e:
 			// MVI E, D8
@@ -161,7 +161,7 @@ int decode(CPUState *state)
 			break;
 		case 0x25:
 			// DCR H
-			unimplementedInstruction(state);
+			dcr(state, &state->h, opcode);
 			break;
 		case 0x26:
 			// MVI H, D8
@@ -189,7 +189,7 @@ int decode(CPUState *state)
 			break;
 		case 0x2d:
 			// DCR L
-			unimplementedInstruction(state);
+			dcr(state, &state->l, opcode);
 			break;
 		case 0x2e:
 			// MVI L, D8
@@ -249,7 +249,7 @@ int decode(CPUState *state)
 			break;
 		case 0x3d:
 			// DCR A
-			unimplementedInstruction(state);
+			dcr(state, &state->a, opcode);
 			break;
 		case 0x3e:
 			// MVI A, D8

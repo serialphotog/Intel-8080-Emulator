@@ -38,6 +38,9 @@ void runCPU(CPUState *state);
 // Read a binary file into memory
 void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 
+// Calculates the parity of a number
+int calculateParity(int num, int size);
+
 // Performs an MVI instruction
 void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode);
 
@@ -70,5 +73,8 @@ void mov_m2r(uint8_t *memory, uint8_t *dest, uint8_t *h, uint8_t *l, unsigned ch
 
 // Performs a INX instruction on a normal register
 void inx(uint8_t *reg1, uint8_t *reg2, unsigned char *opcode);
+
+// Performs a DCR instruction
+void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode);
 
 #endif

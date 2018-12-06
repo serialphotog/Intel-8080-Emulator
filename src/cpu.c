@@ -37,6 +37,24 @@ void runCPU(CPUState *state)
 	}
 }
 
+// Calculates the parity of a number
+// Parity is one if the number of one bits is even.
+int calculateParity(int num, int size)
+{
+	int i;
+	int parity = 0;
+
+	num = (num & (1 << size) - 1);
+	for (i = 0; i < size; i++)
+	{
+		if (num & 0x1)
+			parity++;
+		num = num >> 1;
+	}
+
+	return ((num & 0x1) == 0);
+}
+
 // Reads a binary file into memory
 void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset)
 {
@@ -152,4 +170,16 @@ void inx(uint8_t *reg1, uint8_t *reg2, unsigned char *opcode)
 	(*reg2)++;
 	if ((*reg2) == 0)
 		(*reg1)++;
+}
+
+// Performs a DCR instruction
+//		REG <- REG - 1
+//		FLAGS: Z, S, P, AC
+void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode)
+{
+	uint8_t res = (*reg) - 1;
+	state->cc.z = (res == 0);
+	state->cc.s = ((res & 0x80) == 0x80);
+	state->cc.p = calculateParity(res, 8);
+	*reg = res;
 }
