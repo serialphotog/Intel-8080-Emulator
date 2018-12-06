@@ -44,7 +44,7 @@ int calculateParity(int num, int size)
 	int i;
 	int parity = 0;
 
-	num = (num & (1 << size) - 1);
+	num = (num & ((1 << size) - 1));
 	for (i = 0; i < size; i++)
 	{
 		if (num & 0x1)
@@ -79,7 +79,7 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset)
 void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode)
 {
 	*reg = opcode[1];
-	*pc++;
+	(*pc)++;
 }
 
 // Performs an MVI from memory
