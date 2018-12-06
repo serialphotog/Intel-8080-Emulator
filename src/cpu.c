@@ -20,11 +20,12 @@ void runCPU(CPUState *state)
 
 	while (complete == 0)
 	{
+		printf("\t");
+		disassembleInstruction(state->memory, state->pc);
+
 		complete = decode(state);
 
 		// Print debug info
-		printf("\t");
-		disassembleInstruction(state->memory, state->pc);
 		printf("\t");
 		printf("%c", state->cc.z ? 'z' : '.');
 		printf("%c", state->cc.s ? 's' : '.');

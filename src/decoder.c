@@ -1019,7 +1019,7 @@ int decode(CPUState *state)
 // Gets called when an unimplemented instruction is encountered
 void unimplementedInstruction(CPUState *state)
 {
-	printf("[ERROR]: Unimplemented instruction encountered\n");
+	printf("\n[ERROR]: Unimplemented instruction encountered\n");
 
 	// PC will have incremented. Correct for that
 	state->pc--;
