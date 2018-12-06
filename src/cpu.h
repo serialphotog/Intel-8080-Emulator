@@ -68,4 +68,7 @@ void mov_r2m(uint8_t *memory, uint8_t *src, uint8_t *h, uint8_t *l, unsigned cha
 // performs a move from memory to register
 void mov_m2r(uint8_t *memory, uint8_t *dest, uint8_t *h, uint8_t *l, unsigned char *opcode);
 
+// Performs a INX instruction on a normal register
+void inx(uint8_t *reg1, uint8_t *reg2, unsigned char *opcode);
+
 #endif

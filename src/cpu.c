@@ -144,3 +144,12 @@ void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory, unsigned char *
 	uint16_t offs = (*hi << 8) | *lo;
 	*a = memory[offs];
 }
+
+// Performs a INX instruction on a normal register
+//		Reg1Reg2 <- Reg1Reg2 + 1
+void inx(uint8_t *reg1, uint8_t *reg2, unsigned char *opcode)
+{
+	(*reg2)++;
+	if ((*reg2) == 0)
+		(*reg1)++;
+}

@@ -37,7 +37,7 @@ int decode(CPUState *state)
 			break;
 		case 0x03:
 			// INX B
-			unimplementedInstruction(state);
+			inx(&state->b, &state->c, opcode);
 			break;
 		case 0x04:
 			// INR B
@@ -93,7 +93,7 @@ int decode(CPUState *state)
 			break;
 		case 0x13:
 			// INX D
-			unimplementedInstruction(state);
+			inx(&state->d, &state->e, opcode);
 			break;
 		case 0x14:
 			// INR D
@@ -153,7 +153,7 @@ int decode(CPUState *state)
 			break;
 		case 0x23:
 			// INX H
-			unimplementedInstruction(state);
+			inx(&state->h, &state->l, opcode);
 			break;
 		case 0x24:
 			// INR H
