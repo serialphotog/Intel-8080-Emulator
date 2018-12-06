@@ -1,5 +1,6 @@
 #include "cpu.h"
 #include "decoder.h"
+#include "disasm.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,12 +24,14 @@ void runCPU(CPUState *state)
 
 		// Print debug info
 		printf("\t");
+		disassembleInstruction(state->memory, state->pc);
+		printf("\t");
 		printf("%c", state->cc.z ? 'z' : '.');
 		printf("%c", state->cc.s ? 's' : '.');
 		printf("%c", state->cc.p ? 'p' : '.');
 		printf("%c", state->cc.cy ? 'c' : '.');
 		printf("%c", state->cc.ac ? 'a' : '.');
-		printf("A $%02x B $%02x D $%02x E $%02x H $%02x L $%02x SP %04x\n",
+		printf(" A $%02x B $%02x D $%02x E $%02x H $%02x L $%02x SP %04x\n",
 			state->a, state->b, state->d, state->e, state->h, state->l, state->sp);
 	}
 }
