@@ -114,11 +114,12 @@ void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char * opcode)
 }
 
 // Performs an LXI instruction on a 8-bit register
-//		REGISTER.hi <- byte 3
-//		REGISTER.lo <- byte 2
-void lxi_8(uint8_t *reg, uint16_t *pc, unsigned char * opcode)
+//		hi <- byte 3
+// 		lo <- byte 2
+void lxi_8(uint8_t *hi, uint8_t *lo, uint16_t *pc, unsigned char * opcode)
 {
-	*reg = (opcode[2] << 8) | opcode[1];
+	*hi = opcode[2];
+	*lo = opcode[1];
 	*pc += 2;
 }
 
