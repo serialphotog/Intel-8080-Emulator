@@ -453,27 +453,27 @@ int decode(CPUState *state)
 			break;
 		case 0x70:
 			// MOV M, B
-			mov_m2r(state->memory, &state->b, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->b, &state->h, &state->l, opcode);
 			break;
 		case 0x71:
 			// MOV M, C
-			mov_m2r(state->memory, &state->c, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->c, &state->h, &state->l, opcode);
 			break;
 		case 0x72:
 			// MOV M, D
-			mov_m2r(state->memory, &state->d, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->d, &state->h, &state->l, opcode);
 			break;
 		case 0x73:
 			// MOV M, E
-			mov_m2r(state->memory, &state->e, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->e, &state->h, &state->l, opcode);
 			break;
 		case 0x74:
 			// MOV M, H
-			mov_m2r(state->memory, &state->h, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->h, &state->h, &state->l, opcode);
 			break;
 		case 0x75:
 			// MOV M, L
-			mov_m2r(state->memory, &state->l, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->l, &state->h, &state->l, opcode);
 			break;
 		case 0x76:
 			// HLT
@@ -481,7 +481,7 @@ int decode(CPUState *state)
 			break;
 		case 0x77:
 			// MOV M, A
-			mov_m2r(state->memory, &state->a, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->a, &state->h, &state->l, opcode);
 			break;
 		case 0x78:
 			// MOV A, B
