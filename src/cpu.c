@@ -221,3 +221,14 @@ void cpi(CPUState *state, unsigned char *opcode)
 	state->cc.cy = (state->a < opcode[1]);
 	state->pc++;
 }
+
+// Performs a push instruction
+//		(SP-2) <- hi
+//		(SP-1) <- lo
+//		SP <- SP + 2
+void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
+{
+	memory[(*sp)-2] = *hi;
+	memory[(*sp)-1] = *lo;
+	(*sp) += 2;
+}

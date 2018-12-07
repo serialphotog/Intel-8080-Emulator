@@ -86,4 +86,7 @@ void ret(CPUState *state);
 // Performs a CPI instruction
 void cpi(CPUState *state, unsigned char *opcode);
 
+// Performs a push instruction
+void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory);
+
 #endif

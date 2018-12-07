@@ -793,7 +793,7 @@ int decode(CPUState *state)
 			break;
 		case 0xc5:
 			// PUSH B
-			unimplementedInstruction(state);
+			push(&state->c, &state->b, &state->sp, state->memory);
 			break;
 		case 0xc6:
 			// ADI D8
@@ -853,7 +853,7 @@ int decode(CPUState *state)
 			break;
 		case 0xd5:
 			// PUSH D
-			unimplementedInstruction(state);
+			push(&state->e, &state->d, &state->sp, state->memory);
 			break;
 		case 0xd6:
 			// SUI D8
@@ -909,7 +909,7 @@ int decode(CPUState *state)
 			break;
 		case 0xe5:
 			// PUSH H
-			unimplementedInstruction(state);
+			push(&state->l, &state->h, &state->sp, state->memory);
 			break;
 		case 0xe6:
 			// ANI D8
