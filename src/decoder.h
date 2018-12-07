@@ -2,7 +2,7 @@
 #define __ENCODER_H__
 
 // Gets called when an unimplemented instruction is encountered
-void unimplementedInstruction(CPUState *state);
+void unimplementedInstruction(CPUState *state, unsigned char *opcode);
 
 // Decodes CPU instructions
 int decode(CPUState *state);
