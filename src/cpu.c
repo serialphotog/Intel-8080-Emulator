@@ -208,3 +208,16 @@ void ret(CPUState *state)
 	state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8);
 	state->sp += 2;
 }
+
+// Performs a CPI instruction
+//		A - data
+//		FLAGS: Z, S, P, CY, AC
+void cpi(CPUState *state, unsigned char *opcode)
+{
+	uint8_t res = state->a - opcode[1];
+	state->cc.z = (res == 0);
+	state->cc.s = ((res & 0x80) == 0x80);
+	state->cc.p = calculateParity(res, 8);
+	state->cc.cy = (state->a < opcode[1]);
+	state->pc++;
+}

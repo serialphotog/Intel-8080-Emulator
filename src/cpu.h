@@ -83,4 +83,7 @@ void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode);
 // Performs a RET instruction
 void ret(CPUState *state);
 
+// Performs a CPI instruction
+void cpi(CPUState *state, unsigned char *opcode);
+
 #endif

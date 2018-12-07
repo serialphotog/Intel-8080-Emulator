@@ -1001,7 +1001,7 @@ int decode(CPUState *state)
 			break;
 		case 0xfe:
 			// CPI D8
-			unimplementedInstruction(state);
+			cpi(state, opcode);
 			break;
 		case 0xff:
 			// RST 7
