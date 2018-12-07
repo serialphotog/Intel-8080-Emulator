@@ -233,13 +233,38 @@ void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 	(*sp) += 2;
 }
 
-// Performs a DAD instruction
+// Performs a DAD H instruction
 //		HL = HL + HI
-void dad(uint8_t *hi, uint8_t *lo, CPUState *state)
+void dad_h(uint8_t *h, uint8_t *l, CPUState *state)
 {
-	uint32_t hl = ((*hi) << 8) | *lo;
+	uint32_t hl = ((*h) << 8) | *l;
 	uint32_t res = hl + hl;
-	*hi = (res & 0xff00) >> 8;
-	*lo = res & 0xff;
+	*h = (res & 0xff00) >> 8;
+	*l = res & 0xff;
 	state->cc.cy = ((res & 0xffff0000) != 0);
+}
+
+// Performs a DAD instruction
+//		HL = HL + hilo 
+void dad(uint8_t *h, uint8_t *l, uint8_t *hi, uint8_t *lo, CPUState *state)
+{
+	uint32_t hl = ((*h) << 8) | *l;
+	uint32_t hilo = ((*hi) << 8) | *lo;
+	uint32_t res = hl + hilo;
+	*h = (res & 0xff00) >> 8;
+	*l = res & 0xff;
+	state->cc.cy = ((res & 0xffff0000) != 0);
+}
+
+// Performs an XCHG
+//		H <-> D
+//		L <-> E
+void xchg(CPUState *state)
+{
+	uint8_t tmp = state->h;
+	state->h = state->d;
+	state->d = tmp;
+	tmp = state->l;
+	state->l = state->e;
+	state->e = tmp;
 }

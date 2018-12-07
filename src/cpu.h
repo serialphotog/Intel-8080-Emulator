@@ -89,7 +89,13 @@ void cpi(CPUState *state, unsigned char *opcode);
 // Performs a push instruction
 void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory);
 
+// Performs a DAD H instruction
+void dad_h(uint8_t *hi, uint8_t *lo, CPUState *state);
+
 // Performs a DAD instruction
-void dad(uint8_t *hi, uint8_t *lo, CPUState *state);
+void dad(uint8_t *h, uint8_t *l, uint8_t *hi, uint8_t *lo, CPUState *state);
+
+// Performs an XCHG
+void xchg(CPUState *state);
 
 #endif
