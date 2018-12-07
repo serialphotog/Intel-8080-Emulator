@@ -52,7 +52,7 @@ int calculateParity(int num, int size)
 		num = num >> 1;
 	}
 
-	return ((num & 0x1) == 0);
+	return ((parity & 0x1) == 0);
 }
 
 // Reads a binary file into memory
