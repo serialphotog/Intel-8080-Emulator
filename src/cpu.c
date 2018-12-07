@@ -198,3 +198,13 @@ void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode)
 	state->cc.p = calculateParity(res, 8);
 	*reg = res;
 }
+
+// Performs a RET instruction
+//		PC.lo <- (sp)
+//		PC.hi <- (sp+1)
+//		SP <- SP+2
+void ret(CPUState *state)
+{
+	state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8);
+	state->sp += 2;
+}

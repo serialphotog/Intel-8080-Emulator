@@ -80,4 +80,7 @@ void inx(uint8_t *reg1, uint8_t *reg2, unsigned char *opcode);
 // Performs a DCR instruction
 void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode);
 
+// Performs a RET instruction
+void ret(CPUState *state);
+
 #endif

@@ -809,7 +809,7 @@ int decode(CPUState *state)
 			break;
 		case 0xc9:
 			// RET
-			unimplementedInstruction(state);
+			ret(state);
 			break;
 		case 0xca:
 			// JZ adr
