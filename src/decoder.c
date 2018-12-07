@@ -57,7 +57,7 @@ int decode(CPUState *state)
 			break;
 		case 0x09:
 			// DAD B
-			unimplementedInstruction(state);
+			dad(&state->b, &state->c, state);
 			break;
 		case 0x0a:
 			// LDAX B
@@ -113,7 +113,7 @@ int decode(CPUState *state)
 			break;
 		case 0x19:
 			// DAD D
-			unimplementedInstruction(state);
+			dad(&state->d, &state->e, state);
 			break;
 		case 0x1a:
 			// LDAX D
@@ -173,7 +173,7 @@ int decode(CPUState *state)
 			break;
 		case 0x29:
 			// DAD H
-			unimplementedInstruction(state);
+			dad(&state->h, &state->l, state);
 			break;
 		case 0x2a:
 			// LHLD adr

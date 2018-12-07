@@ -232,3 +232,14 @@ void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 	memory[(*sp)-1] = *lo;
 	(*sp) += 2;
 }
+
+// Performs a DAD instruction
+//		HL = HL + HI
+void dad(uint8_t *hi, uint8_t *lo, CPUState *state)
+{
+	uint32_t hl = ((*hi) << 8) | *lo;
+	uint32_t res = hl + hl;
+	*hi = (res & 0xff00) >> 8;
+	*lo = res & 0xff;
+	state->cc.cy = ((res & 0xffff0000) != 0);
+}
