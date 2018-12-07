@@ -77,7 +77,7 @@ int decode(CPUState *state)
 			break;
 		case 0x0e:
 			// MVI C, D8
-			unimplementedInstruction(state);
+			mvi(&state->c, &state->pc, opcode);
 			break;
 		case 0x0f:
 			// RRC
