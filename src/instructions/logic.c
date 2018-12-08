@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: decoder.h
+ * File: logic.c
  *
  * Purpose:
- *		Specification for the CPU's decoder.
+ *		The various logical operations supported by the Intel 8080.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -26,13 +26,34 @@
  *
  ******************************************************************************/
 
-#ifndef __ENCODER_H__
-#define __ENCODER_H__
+#include "logic.h"
 
-// Gets called when an unimplemented instruction is encountered
-void unimplementedInstruction(CPUState *state, unsigned char *opcode);
+// ANI (and immediate with A)
+void ani(CPUState *state, unsigned char *opcode)
+{
+	state->a = state->a & opcode[1];
+	state->cc.cy = state->cc.ac = 0;
+	state->cc.z = (state->a == 0);
+	state->cc.s = ((state->a & 0x80) == 0x80);
+	state->cc.p = calculateParity(state->a, 8);
+	state->pc++;
+}
 
-// Decodes CPU instructions
-int decode(CPUState *state);
+// CPI (compare immediate with A)
+void cpi(CPUState *state, unsigned char *opcode)
+{
+	uint8_t res = state->a - opcode[1];
+	state->cc.z = (res == 0);
+	state->cc.s = ((res & 0x80) == 0x80);
+	state->cc.p = calculateParity(res, 8);
+	state->cc.cy = (state->a < opcode[1]);
+	state->pc++;
+}
 
-#endif
+// RRC (Rotate A right)
+void rrc(CPUState *state)
+{
+	uint8_t previousA = state->a;
+	state->a = ((previousA & 0x01) << 7) | (previousA >> 1);
+	state->cc.cy = ((previousA & 0x01) == 0x01);
+}

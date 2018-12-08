@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: decoder.h
+ * File: logic.h
  *
  * Purpose:
- *		Specification for the CPU's decoder.
+ *		Specification for the various logical operations supported by the CPU.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -26,13 +26,50 @@
  *
  ******************************************************************************/
 
-#ifndef __ENCODER_H__
-#define __ENCODER_H__
+#ifndef __LOGIC_H__
+#define __LOGIC_H__
 
-// Gets called when an unimplemented instruction is encountered
-void unimplementedInstruction(CPUState *state, unsigned char *opcode);
+#include "cpu.h"
 
-// Decodes CPU instructions
-int decode(CPUState *state);
+#include <stdint.h>
+
+/*
+ * Performs an ANI (and immediate) instruction.
+ *
+ * ANI performs an immediate and with the A register.
+ *
+ * RTN:
+ *		A <- A & D8
+ *
+ * FLAGS:
+ *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxillary Carry (AC)
+ */
+void ani(CPUState *state, unsigned char *opcode);
+
+/**
+ * Performs a CPI (compare immediate with A) operation.
+ *
+ * RTN:
+ *		A - data
+ *
+ * FLAGS:
+ *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
+ */
+void cpi(CPUState *state, unsigned char *opcode);
+
+/*
+ * Performs an RRC instruction.
+ *
+ * RRC rotates the A register right.
+ *
+ * RTN:
+ *		A = A >> 1
+ *		bit 7 = previous bit
+ *		CY = previous bit 0
+ *
+ * FLAGS:
+ *		Carry (CY)
+ */
+void rrc(CPUState *state);
 
 #endif

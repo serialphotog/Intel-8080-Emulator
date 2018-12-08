@@ -1,8 +1,9 @@
 /*******************************************************************************
- * File: decoder.h
+ * File: branch.c
  *
  * Purpose:
- *		Specification for the CPU's decoder.
+ *		The various branch instructions supported by the Intel 8080. These 
+ *		include calls such as jumps and calls.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -26,13 +27,41 @@
  *
  ******************************************************************************/
 
-#ifndef __ENCODER_H__
-#define __ENCODER_H__
+#include "branch.h"
 
-// Gets called when an unimplemented instruction is encountered
-void unimplementedInstruction(CPUState *state, unsigned char *opcode);
+#include "data.h"
 
-// Decodes CPU instructions
-int decode(CPUState *state);
+// JMP (unconditional jump)
+void jmp(CPUState *state, unsigned char *opcode)
+{
+	state->pc = (opcode[2] << 8) | opcode[1];
+}
 
-#endif
+// JNZ (jump not zero)
+void jnz(CPUState *state, unsigned char *opcode)
+{
+	if (state->cc.z == 0)
+		jmp(state, opcode);
+	else
+		state->pc += 2;
+}
+
+// CALL (unconditional call)
+void call(CPUState *state, unsigned char *opcode)
+{
+	// PUSH our return location on to the stack
+	uint16_t ret = state->pc + 2;
+	uint8_t hi = (ret & 0xff);
+	uint8_t lo = (ret >> 8) & 0xff;
+	push(&hi, &lo, &state->sp, state->memory);
+
+	// Jump to the desired location
+	jmp(state, opcode);
+}
+
+// RET (return)
+void ret(CPUState *state)
+{
+	state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8);
+	state->sp += 2;
+}

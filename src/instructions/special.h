@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: decoder.h
+ * File: special.h
  *
  * Purpose:
- *		Specification for the CPU's decoder.
+ *		Specification for sepcial operations performed by the CPU.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -26,13 +26,18 @@
  *
  ******************************************************************************/
 
-#ifndef __ENCODER_H__
-#define __ENCODER_H__
+#ifndef __SPECIAL_H__
+#define __SPECIAL_H__
 
-// Gets called when an unimplemented instruction is encountered
-void unimplementedInstruction(CPUState *state, unsigned char *opcode);
+#include "cpu.h"
 
-// Decodes CPU instructions
-int decode(CPUState *state);
+/**
+ * Performs an OUT operation.
+ *
+ * NOTE: I'm not currently sure how this should be implemented. This is 
+ * currently just a stub implementation to allow the CPU to continue executing
+ * when it encounters this instruction.
+ */
+void out(CPUState *state);
 
 #endif

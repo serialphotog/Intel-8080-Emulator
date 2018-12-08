@@ -1,3 +1,32 @@
+/*******************************************************************************
+ * File: cpu.h
+ *
+ * Purpose:
+ *		Specification for the base data structures and operations supported by 
+ *		the CPU.
+ *
+ * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * of this software and associated documentation files (the "Software"), to deal 
+ * in the Software without restriction, including without limitation the rights 
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+ * copies of the Software, and to permit persons to whom the Software is 
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+ * SOFTWARE.
+ *
+ ******************************************************************************/
+
 #ifndef __CPU_H__
 #define __CPU_H__
 
@@ -40,84 +69,5 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 
 // Calculates the parity of a number
 int calculateParity(int num, int size);
-
-// Performs an MVI instruction
-void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode);
-
-// Performs an MVI from memory
-void mvi_m(CPUState *state, unsigned char *opcode);
-
-// Performs a JMP operation
-void jmp(CPUState *state, unsigned char *opcode);
-
-// Performs a JNZ operation
-void jnz(CPUState *state, unsigned char *opcode);
-
-// Prfroms an lxi instruction on a 16-bit register
-void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char *opcode);
-
-// Performs an lxi instruction on a 8-bit register.
-void lxi_8(uint8_t *hi, uint8_t *lo, uint16_t *pc, unsigned char *opcode);
-
-// Performs an LDAX instruction
-void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory, unsigned char *opcode);
-
-// Performs a CALL instruction
-void call(CPUState *state, unsigned char *opcode);
-
-// Performs a MOV from register to register
-void mov_r2r(uint8_t *dest, uint8_t *src, unsigned char *opcode);
-
-// Performs a move from register to memory
-void mov_r2m(uint8_t *memory, uint8_t *src, uint8_t *h, uint8_t *l, unsigned char *opcode);
-
-// performs a move from memory to register
-void mov_m2r(uint8_t *memory, uint8_t *dest, uint8_t *h, uint8_t *l, unsigned char *opcode);
-
-// Performs a INX instruction on a normal register
-void inx(uint8_t *reg1, uint8_t *reg2, unsigned char *opcode);
-
-// Performs a DCR instruction
-void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode);
-
-// Performs a RET instruction
-void ret(CPUState *state);
-
-// Performs a CPI instruction
-void cpi(CPUState *state, unsigned char *opcode);
-
-// Performs a push instruction
-void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory);
-
-// Performs a push PSW
-void push_psw(CPUState *state);
-
-// Performs a POP
-void pop(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory);
-
-// Performs a POP PSW
-void pop_psw(CPUState *state);
-
-// Performs a DAD H instruction
-void dad_h(uint8_t *hi, uint8_t *lo, CPUState *state);
-
-// Performs a DAD instruction
-void dad(uint8_t *h, uint8_t *l, uint8_t *hi, uint8_t *lo, CPUState *state);
-
-// Performs an XCHG
-void xchg(CPUState *state);
-
-// Performs an OUT instruction
-// TOOD: I have no idea how to implement this currently...
-void out(CPUState *state);
-
-// Performs an RRC instruction
-void rrc(CPUState *state);
-
-// Performs an ANI instruction
-void ani(CPUState *state, unsigned char *opcode);
-
-// Performs an ADI instruction
-void adi(CPUState *state, unsigned char *opcode);
 
 #endif

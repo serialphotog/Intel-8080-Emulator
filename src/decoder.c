@@ -1,7 +1,41 @@
+/*******************************************************************************
+ * File: decoder.c
+ *
+ * Purpose:
+ *		Decodes instructions and calls the functional implementations.
+ *
+ * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * of this software and associated documentation files (the "Software"), to deal 
+ * in the Software without restriction, including without limitation the rights 
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+ * copies of the Software, and to permit persons to whom the Software is 
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+ * SOFTWARE.
+ *
+ ******************************************************************************/
+
 #include "cpu.h"
 
 #include "decoder.h"
 #include "disasm.h"
+
+#include "instructions/arithmetic.h"
+#include "instructions/branch.h"
+#include "instructions/data.h"
+#include "instructions/logic.h"
+#include "instructions/special.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,7 +63,7 @@ int decode(CPUState *state)
 			break;
 		case 0x01:
 			// LXI B, D16
-			lxi_8(&state->b, &state->c, &state->pc, opcode);
+			lxi(&state->b, &state->c, &state->pc, opcode);
 			break;
 		case 0x02:
 			// STAX B
@@ -37,7 +71,7 @@ int decode(CPUState *state)
 			break;
 		case 0x03:
 			// INX B
-			inx(&state->b, &state->c, opcode);
+			inx(&state->b, &state->c);
 			break;
 		case 0x04:
 			// INR B
@@ -85,7 +119,7 @@ int decode(CPUState *state)
 			break;
 		case 0x11:
 			// LXI D, D16
-			lxi_8(&state->d, &state->e, &state->pc, opcode);
+			lxi(&state->d, &state->e, &state->pc, opcode);
 			break;
 		case 0x12:
 			// STAX D
@@ -93,7 +127,7 @@ int decode(CPUState *state)
 			break;
 		case 0x13:
 			// INX D
-			inx(&state->d, &state->e, opcode);
+			inx(&state->d, &state->e);
 			break;
 		case 0x14:
 			// INR D
@@ -145,7 +179,7 @@ int decode(CPUState *state)
 			break;
 		case 0x21:
 			// LXI H, D16
-			lxi_8(&state->h, &state->l, &state->pc, opcode);
+			lxi(&state->h, &state->l, &state->pc, opcode);
 			break;
 		case 0x22:
 			// SHLD adr
@@ -153,7 +187,7 @@ int decode(CPUState *state)
 			break;
 		case 0x23:
 			// INX H
-			inx(&state->h, &state->l, opcode);
+			inx(&state->h, &state->l);
 			break;
 		case 0x24:
 			// INR H
@@ -261,219 +295,219 @@ int decode(CPUState *state)
 			break;
 		case 0x40:
 			// MOV B, B
-			mov_r2r(&state->b, &state->b, opcode);
+			mov_r2r(&state->b, &state->b);
 			break;
 		case 0x41:
 			// MOV B, C
-			mov_r2r(&state->b, &state->c, opcode);
+			mov_r2r(&state->b, &state->c);
 			break;
 		case 0x42:
 			// MOV B, D
-			mov_r2r(&state->b, &state->d, opcode);
+			mov_r2r(&state->b, &state->d);
 			break;
 		case 0x43:
 			// MOV B, E
-			mov_r2r(&state->b, &state->e, opcode);
+			mov_r2r(&state->b, &state->e);
 			break;
 		case 0x44:
 			// MOV B, H
-			mov_r2r(&state->b, &state->h, opcode);
+			mov_r2r(&state->b, &state->h);
 			break;
 		case 0x45:
 			// MOV B, L
-			mov_r2r(&state->b, &state->l, opcode);
+			mov_r2r(&state->b, &state->l);
 			break;
 		case 0x46:
 			// MOV B, M
-			mov_m2r(state->memory, &state->b, &state->h, &state->l, opcode);
+			mov_m2r(state->memory, &state->b, &state->h, &state->l);
 			break;
 		case 0x47:
 			// MOV B, A
-			mov_r2r(&state->b, &state->a, opcode);
+			mov_r2r(&state->b, &state->a);
 			break;
 		case 0x48:
 			// MOV C, B
-			mov_r2r(&state->c, &state->b, opcode);
+			mov_r2r(&state->c, &state->b);
 			break;
 		case 0x49:
 			// MOV C, C
-			mov_r2r(&state->c, &state->c, opcode);
+			mov_r2r(&state->c, &state->c);
 			break;
 		case 0x4a:
 			// MOV C, D
-			mov_r2r(&state->c, &state->d, opcode);
+			mov_r2r(&state->c, &state->d);
 			break;
 		case 0x4b:
 			// MOV C, E
-			mov_r2r(&state->c, &state->e, opcode);
+			mov_r2r(&state->c, &state->e);
 			break;
 		case 0x4c:
 			// MOV C, H
-			mov_r2r(&state->c, &state->h, opcode);
+			mov_r2r(&state->c, &state->h);
 			break;
 		case 0x4d:
 			// MOV C, L
-			mov_r2r(&state->c, &state->l, opcode);
+			mov_r2r(&state->c, &state->l);
 			break;
 		case 0x4e:
 			// MOV C, M
-			mov_m2r(state->memory, &state->c, &state->h, &state->l, opcode);
+			mov_m2r(state->memory, &state->c, &state->h, &state->l);
 			break;
 		case 0x4f:
 			// MOV C, A
-			mov_r2r(&state->c, &state->a, opcode);
+			mov_r2r(&state->c, &state->a);
 			break;
 		case 0x50:
 			// MOV D, B
-			mov_r2r(&state->d, &state->b, opcode);
+			mov_r2r(&state->d, &state->b);
 			break;
 		case 0x51:
 			// MOV D, C
-			mov_r2r(&state->d, &state->c, opcode);
+			mov_r2r(&state->d, &state->c);
 			break;
 		case 0x52:
 			// MOV D, D
-			mov_r2r(&state->d, &state->d, opcode);
+			mov_r2r(&state->d, &state->d);
 			break;
 		case 0x53:
 			// MOV D, E
-			mov_r2r(&state->d, &state->e, opcode);
+			mov_r2r(&state->d, &state->e);
 			break;
 		case 0x54:
 			// MOV D, H
-			mov_r2r(&state->d, &state->h, opcode);
+			mov_r2r(&state->d, &state->h);
 			break;
 		case 0x55:
 			// MOV D, L
-			mov_r2r(&state->d, &state->l, opcode);
+			mov_r2r(&state->d, &state->l);
 			break;
 		case 0x56:
 			// MOV D, M
-			mov_m2r(state->memory, &state->d, &state->h, &state->l, opcode);
+			mov_m2r(state->memory, &state->d, &state->h, &state->l);
 			break;
 		case 0x57:
 			// MOV D, A
-			mov_r2r(&state->d, &state->a, opcode);
+			mov_r2r(&state->d, &state->a);
 			break;
 		case 0x58:
 			// MOV E, B
-			mov_r2r(&state->e, &state->b, opcode);
+			mov_r2r(&state->e, &state->b);
 			break;
 		case 0x59:
 			// MOV E, C
-			mov_r2r(&state->e, &state->c, opcode);
+			mov_r2r(&state->e, &state->c);
 			break;
 		case 0x5a:
 			// MOV E, D
-			mov_r2r(&state->e, &state->d, opcode);
+			mov_r2r(&state->e, &state->d);
 			break;
 		case 0x5b:
 			// MOV E, E
-			mov_r2r(&state->e, &state->e, opcode);
+			mov_r2r(&state->e, &state->e);
 			break;
 		case 0x5c:
 			// MOV E, H
-			mov_r2r(&state->e, &state->h, opcode);
+			mov_r2r(&state->e, &state->h);
 			break;
 		case 0x5d:
 			// MOV E, L
-			mov_r2r(&state->e, &state->l, opcode);
+			mov_r2r(&state->e, &state->l);
 			break;
 		case 0x5e:
 			// MOV E, M
-			mov_m2r(state->memory, &state->e, &state->h, &state->l, opcode);
+			mov_m2r(state->memory, &state->e, &state->h, &state->l);
 			break;
 		case 0x5f:
 			// MOV E, A
-			mov_r2r(&state->e, &state->a, opcode);
+			mov_r2r(&state->e, &state->a);
 			break;
 		case 0x60:
 			// MOV H, B
-			mov_r2r(&state->h, &state->b, opcode);
+			mov_r2r(&state->h, &state->b);
 			break;
 		case 0x61:
 			// MOV H, C
-			mov_r2r(&state->h, &state->c, opcode);
+			mov_r2r(&state->h, &state->c);
 			break;
 		case 0x62:
 			// MOV H, D
-			mov_r2r(&state->h, &state->d, opcode);
+			mov_r2r(&state->h, &state->d);
 			break;
 		case 0x63:
 			// MOV H, E
-			mov_r2r(&state->h, &state->e, opcode);
+			mov_r2r(&state->h, &state->e);
 			break;
 		case 0x64:
 			// MOV H, H
-			mov_r2r(&state->h, &state->h, opcode);
+			mov_r2r(&state->h, &state->h);
 			break;
 		case 0x65:
 			// MOV H, L
-			mov_r2r(&state->h, &state->l, opcode);
+			mov_r2r(&state->h, &state->l);
 			break;
 		case 0x66:
 			// MOV H, M
-			mov_m2r(state->memory, &state->h, &state->h, &state->l, opcode);
+			mov_m2r(state->memory, &state->h, &state->h, &state->l);
 			break;
 		case 0x67:
 			// MOV H, A
-			mov_r2r(&state->h, &state->a, opcode);
+			mov_r2r(&state->h, &state->a);
 			break;
 		case 0x68:
 			// MOV L, B
-			mov_r2r(&state->l, &state->b, opcode);
+			mov_r2r(&state->l, &state->b);
 			break;
 		case 0x69:
 			// MOV L, C
-			mov_r2r(&state->l, &state->c, opcode);
+			mov_r2r(&state->l, &state->c);
 			break;
 		case 0x6a:
 			// MOV L, D
-			mov_r2r(&state->l, &state->d, opcode);
+			mov_r2r(&state->l, &state->d);
 			break;
 		case 0x6b:
 			// MOV L, E
-			mov_r2r(&state->l, &state->e, opcode);
+			mov_r2r(&state->l, &state->e);
 			break;
 		case 0x6c:
 			// MOV L, H
-			mov_r2r(&state->l, &state->h, opcode);
+			mov_r2r(&state->l, &state->h);
 			break;
 		case 0x6d:
 			// MOV L, L
-			mov_r2r(&state->l, &state->l, opcode);
+			mov_r2r(&state->l, &state->l);
 			break;
 		case 0x6e:
 			// MOV L, M
-			mov_m2r(state->memory, &state->l, &state->h, &state->l, opcode);
+			mov_m2r(state->memory, &state->l, &state->h, &state->l);
 			break;
 		case 0x6f:
 			// MOV L, A
-			mov_r2r(&state->l, &state->a, opcode);
+			mov_r2r(&state->l, &state->a);
 			break;
 		case 0x70:
 			// MOV M, B
-			mov_r2m(state->memory, &state->b, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->b, &state->h, &state->l);
 			break;
 		case 0x71:
 			// MOV M, C
-			mov_r2m(state->memory, &state->c, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->c, &state->h, &state->l);
 			break;
 		case 0x72:
 			// MOV M, D
-			mov_r2m(state->memory, &state->d, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->d, &state->h, &state->l);
 			break;
 		case 0x73:
 			// MOV M, E
-			mov_r2m(state->memory, &state->e, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->e, &state->h, &state->l);
 			break;
 		case 0x74:
 			// MOV M, H
-			mov_r2m(state->memory, &state->h, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->h, &state->h, &state->l);
 			break;
 		case 0x75:
 			// MOV M, L
-			mov_r2m(state->memory, &state->l, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->l, &state->h, &state->l);
 			break;
 		case 0x76:
 			// HLT
@@ -481,39 +515,39 @@ int decode(CPUState *state)
 			break;
 		case 0x77:
 			// MOV M, A
-			mov_r2m(state->memory, &state->a, &state->h, &state->l, opcode);
+			mov_r2m(state->memory, &state->a, &state->h, &state->l);
 			break;
 		case 0x78:
 			// MOV A, B
-			mov_r2r(&state->a, &state->b, opcode);
+			mov_r2r(&state->a, &state->b);
 			break;
 		case 0x79:
 			// MOV A, C
-			mov_r2r(&state->a, &state->c, opcode);
+			mov_r2r(&state->a, &state->c);
 			break;
 		case 0x7a:
 			// MOV A, D
-			mov_r2r(&state->a, &state->d, opcode);
+			mov_r2r(&state->a, &state->d);
 			break;
 		case 0x7b:
 			// MOV A, E
-			mov_r2r(&state->a, &state->e, opcode);
+			mov_r2r(&state->a, &state->e);
 			break;
 		case 0x7c:
 			// MOV A, H
-			mov_r2r(&state->a, &state->h, opcode);
+			mov_r2r(&state->a, &state->h);
 			break;
 		case 0x7d:
 			// MOV A, L
-			mov_r2r(&state->a, &state->l, opcode);
+			mov_r2r(&state->a, &state->l);
 			break;
 		case 0x7e:
 			// MOV A, M
-			mov_m2r(state->memory, &state->a, &state->h, &state->l, opcode);
+			mov_m2r(state->memory, &state->a, &state->h, &state->l);
 			break;
 		case 0x7f:
 			// MOV A, A
-			mov_r2r(&state->a, &state->a, opcode);
+			mov_r2r(&state->a, &state->a);
 			break;
 		case 0x80:
 			// ADD B

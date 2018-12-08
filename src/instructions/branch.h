@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: decoder.h
+ * File: branch.h
  *
  * Purpose:
- *		Specification for the CPU's decoder.
+ *		Specification of the various branching statements supported by the CPU.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -26,13 +26,49 @@
  *
  ******************************************************************************/
 
-#ifndef __ENCODER_H__
-#define __ENCODER_H__
+#ifndef __BRANCH_H__
+#define __BRANCH_H__
 
-// Gets called when an unimplemented instruction is encountered
-void unimplementedInstruction(CPUState *state, unsigned char *opcode);
+#include "cpu.h"
 
-// Decodes CPU instructions
-int decode(CPUState *state);
+#include <stdint.h>
+
+/**
+ * Performs a JMP (unconditional jump) operation.
+ *
+ * RTN:
+ *		PC <- addr
+ */
+void jmp(CPUState *state, unsigned char *opcode);
+
+/**
+ * Performs a JNZ (jump on no zero) operation.
+ *
+ * RTN:
+ *		if Z != 0 then
+ *			PC <- addr
+ */
+void jnz(CPUState *state, unsigned char *opcode);
+
+/**
+ * Performs a CALL (unconditional call) operation.
+ *
+ * RTN:
+ *		(SP - 1) <- PC.hi
+ *		(SP - 2) <- PC.lo
+ *		SP <- SP + 2
+ *		PC <- addr
+ */
+void call(CPUState *state, unsigned char *opcode);
+
+/**
+ * Performs a RET (return) instruction.
+ *
+ * RTN:
+ *		PC.lo <- (SP)
+ *		PC.hi <- (SP + 1)
+ *		SP <- SP + 2
+ */
+void ret(CPUState *state);
 
 #endif
