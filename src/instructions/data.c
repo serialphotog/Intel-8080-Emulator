@@ -82,6 +82,7 @@ void lda(CPUState *state, unsigned char *opcode)
 {
 	state->a = fetchFromMemory(state->memory, 
 		buildMemoryOffset(opcode[2], opcode[1]));
+	state->pc += 2;
 }
 
 // LDAX (load a indirect)
