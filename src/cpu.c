@@ -81,6 +81,13 @@ void swapRegisters(uint8_t *reg1, uint8_t *reg2)
 	*reg2 = tmp;
 }
 
+// Builds a 2-byte value
+uint16_t build2ByteValue(uint8_t hi, uint8_t lo)
+{
+	uint16_t ret = (hi << 8) | lo;
+	return ret;
+}
+
 // Builds a memory offset
 uint16_t buildMemoryOffset(uint8_t hi, uint8_t lo)
 {

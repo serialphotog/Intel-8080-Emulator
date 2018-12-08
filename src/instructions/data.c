@@ -73,7 +73,7 @@ void lxi(uint8_t *hi, uint8_t *lo, uint16_t *pc, unsigned char *opcode)
 // LXI (load immediate) for 16-bit register pairs
 void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char *opcode)
 {
-	*reg = (opcode[2] << 8) | opcode[1];
+	*reg = build2ByteValue(opcode[2], opcode[1]);
 	*pc += 2;
 }
 

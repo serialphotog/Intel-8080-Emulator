@@ -45,8 +45,8 @@ void adi(CPUState *state, unsigned char *opcode)
 // DAD (direct add)
 void dad(uint8_t *h, uint8_t *l, uint8_t *hi, uint8_t *lo, CPUState *state)
 {
-	uint32_t hl = (*h << 8) | *l;
-	uint32_t hilo = (*hi << 8) | *lo;
+	uint32_t hl = build2ByteValue(*h, *l);
+	uint32_t hilo = build2ByteValue(*hi, *lo);
 	uint32_t res = hl + hilo;
 	*h = (res & 0xff00) >> 8;
 	*l = res & 0xff;
@@ -56,7 +56,7 @@ void dad(uint8_t *h, uint8_t *l, uint8_t *hi, uint8_t *lo, CPUState *state)
 // DAD H (direct add with H)
 void dad_h(uint8_t *h, uint8_t *l, CPUState *state)
 {
-	uint32_t hl = (*h << 8) | *l;
+	uint32_t hl = build2ByteValue(*h, *l);
 	uint32_t res = hl + hl;
 	*h = (res & 0xff00) >> 8;
 	*l = res & 0xff;
