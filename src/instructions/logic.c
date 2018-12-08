@@ -32,11 +32,15 @@
 void ani(CPUState *state, unsigned char *opcode)
 {
 	state->a = state->a & opcode[1];
-	state->cc.cy = state->cc.ac = 0;
-	state->cc.z = (state->a == 0);
-	state->cc.s = ((state->a & 0x80) == 0x80);
-	state->cc.p = calculateParity(state->a, 8);
+	setFlagsFromA(state);
 	state->pc++;
+}
+
+// XRA (xor with a)
+void xra(CPUState *state, uint8_t *reg)
+{
+	state->a = state->a ^ *reg;
+	setFlagsFromA(state);
 }
 
 // CPI (compare immediate with A)

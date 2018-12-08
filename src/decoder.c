@@ -711,27 +711,27 @@ int decode(CPUState *state)
 			break;
 		case 0xa8:
 			// XRA B
-			unimplementedInstruction(state, opcode);
+			xra(state, &state->b);
 			break;
 		case 0xa9:
 			// XRA C
-			unimplementedInstruction(state, opcode);
+			xra(state, &state->c);
 			break;
 		case 0xaa:
 			// XRA D
-			unimplementedInstruction(state, opcode);
+			xra(state, &state->d);
 			break;
 		case 0xab:
 			// XRA E
-			unimplementedInstruction(state, opcode);
+			xra(state, &state->e);
 			break;
 		case 0xac:
 			// XRA H
-			unimplementedInstruction(state, opcode);
+			xra(state, &state->h);
 			break;
 		case 0xad:
 			// XRA L
-			unimplementedInstruction(state, opcode);
+			xra(state, &state->l);
 			break;
 		case 0xae:
 			// XRA M
@@ -739,7 +739,7 @@ int decode(CPUState *state)
 			break;
 		case 0xaf:
 			// XRA A
-			unimplementedInstruction(state, opcode);
+			xra(state, &state->a);
 			break;
 		case 0xb0:
 			// ORA B

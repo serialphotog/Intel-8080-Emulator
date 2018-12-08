@@ -73,6 +73,15 @@ void printDebug(CPUState *state)
 		state->sp);
 }
 
+// Sets the CPU flags based on the value of the A register
+void setFlagsFromA(CPUState *state)
+{
+	state->cc.cy = state->cc.ac = 0;
+	state->cc.z = (state->a == 0);
+	state->cc.s = ((state->a & 0x80) == 0x80);
+	state->cc.p = calculateParity(state->a, 8);	
+}
+
 // Swaps register values
 void swapRegisters(uint8_t *reg1, uint8_t *reg2)
 {

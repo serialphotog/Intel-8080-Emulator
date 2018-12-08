@@ -47,6 +47,19 @@
 void ani(CPUState *state, unsigned char *opcode);
 
 /**
+ * Performs an XRA (xor with a) operationl
+ *
+ * XORs a register with the A register.
+ *
+ * RTN:
+ *		A <- A ^ REGISTER
+ *
+ * FLAGS:
+ *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
+ */
+void xra(CPUState *state, uint8_t *reg);
+
+/**
  * Performs a CPI (compare immediate with A) operation.
  *
  * RTN:

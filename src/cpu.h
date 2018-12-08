@@ -78,6 +78,11 @@ void printDebug(CPUState *state);
 void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 
 /**
+ * Sets the flags based on the value of A
+ */
+void setFlagsFromA(CPUState *state);
+
+/**
  * Swaps the values in two registers.
  */
 void swapRegisters(uint8_t *reg1, uint8_t *reg2);
