@@ -111,6 +111,14 @@ void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory,
 	unsigned char *opcode);
 
 /**
+ * Performs a STA (store a direct) operation.
+ *
+ * RTN:
+ *		(addr) <- A
+ */
+void sta(CPUState *state, unsigned char *opcode);
+
+/**
  * Performs a PUSH instruction.
  *
  * Pushes a value onto the stack

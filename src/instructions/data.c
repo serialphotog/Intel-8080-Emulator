@@ -92,6 +92,14 @@ void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory,
 	*a = fetchFromMemory(memory, buildMemoryOffset(*hi, *lo));
 }
 
+// STA (store a direct)
+void sta(CPUState *state, unsigned char *opcode)
+{
+	setMemoryOffset(state->memory, buildMemoryOffset(opcode[2], opcode[1]),
+		state->a);
+	state->pc += 2;
+}
+
 // PUSH 
 void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 {

@@ -243,7 +243,7 @@ int decode(CPUState *state)
 			break;
 		case 0x32:
 			// STA adr
-			unimplementedInstruction(state, opcode);
+			sta(state, opcode);
 			break;
 		case 0x33:
 			// INX SP
