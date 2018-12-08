@@ -28,6 +28,13 @@
 
 #include "logic.h"
 
+// ANA (and a)
+void ana(CPUState *state, uint8_t *reg)
+{
+	state->a = state->a & *reg;
+	setFlagsFromA(state);
+}
+
 // ANI (and immediate with A)
 void ani(CPUState *state, unsigned char *opcode)
 {

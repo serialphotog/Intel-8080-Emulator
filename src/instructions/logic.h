@@ -33,6 +33,19 @@
 
 #include <stdint.h>
 
+/**
+ * Performs an ANA (and a) instruction.
+ *
+ * Ands a register with the value in A.
+ *
+ * RTN:
+ *		A <- A & REGISTER
+ *
+ * FLAGS:
+ *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
+ */
+void ana(CPUState *state, uint8_t *reg);
+
 /*
  * Performs an ANI (and immediate) instruction.
  *

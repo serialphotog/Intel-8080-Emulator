@@ -679,27 +679,27 @@ int decode(CPUState *state)
 			break;
 		case 0xa0:
 			// ANA B
-			unimplementedInstruction(state, opcode);
+			ana(state, &state->b);
 			break;
 		case 0xa1:
 			// ANA C
-			unimplementedInstruction(state, opcode);
+			ana(state, &state->c);
 			break;
 		case 0xa2:
 			// ANA D
-			unimplementedInstruction(state, opcode);
+			ana(state, &state->d);
 			break;
 		case 0xa3:
 			// ANA E
-			unimplementedInstruction(state, opcode);
+			ana(state, &state->e);
 			break;
 		case 0xa4:
 			// ANA H
-			unimplementedInstruction(state, opcode);
+			ana(state, &state->h);
 			break;
 		case 0xa5:
 			// ANA L
-			unimplementedInstruction(state, opcode);
+			ana(state, &state->l);
 			break;
 		case 0xa6:
 			// ANA M
@@ -707,7 +707,7 @@ int decode(CPUState *state)
 			break;
 		case 0xa7:
 			// ANA A
-			unimplementedInstruction(state, opcode);
+			ana(state, &state->a);
 			break;
 		case 0xa8:
 			// XRA B
