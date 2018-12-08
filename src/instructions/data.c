@@ -46,7 +46,7 @@ void mov_r2m(uint8_t *memory, uint8_t *src, uint8_t *h, uint8_t *l)
 void mov_m2r(uint8_t *memory, uint8_t *dest, uint8_t *h, uint8_t *l) 
 {
 	uint16_t offs = (*h << 8) | *l;
-	*dest = memory[offs];
+	*dest = fetchFromMemory(memory, offs);
 }
 
 // MVI (move immediate) to register
@@ -84,7 +84,7 @@ void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory,
 	unsigned char *opcode)
 {
 	uint16_t offs = (*hi << 8) | *lo;
-	*a = memory[offs];
+	*a = fetchFromMemory(memory, offs);
 }
 
 // PUSH 
@@ -113,16 +113,16 @@ void push_psw(CPUState *state)
 // POP
 void pop(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 {
-	*lo = memory[*sp];
-	*hi = memory[*sp + 1];
+	*lo = fetchFromMemory(memory, *sp);
+	*hi = fetchFromMemory(memory, *sp + 1);
 	*sp += 2;
 }
 
 // POP PSW
 void pop_psw(CPUState *state)
 {
-	state->a = state->memory[state->sp+1];
-	uint8_t flags = state->memory[state->sp];
+	state->a = fetchFromMemory(state->memory, state->sp + 1);
+	uint8_t flags = fetchFromMemory(state->memory, state->sp);
 	state->cc.z = ((flags & 0x01) == 0x01);
 	state->cc.s = ((flags & 0x02) == 0x02);
 	state->cc.p = ((flags & 0x04) == 0x04);

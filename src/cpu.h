@@ -78,6 +78,11 @@ void printDebug(CPUState *state);
 void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 
 /**
+ * Retrieves a value from memory.
+ */
+uint8_t fetchFromMemory(uint8_t *memory, uint16_t offs);
+
+/**
  * Calculates the parity bit of a number.
  */
 int calculateParity(int num, int size);

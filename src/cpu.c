@@ -73,6 +73,12 @@ void printDebug(CPUState *state)
 		state->sp);
 }
 
+// Retrieves a value from memory
+uint8_t fetchFromMemory(uint8_t *memory, uint16_t offs)
+{
+	return memory[offs];
+}
+
 // Calculates the parity of a number
 // Parity is one if the number of one bits is even.
 int calculateParity(int num, int size)

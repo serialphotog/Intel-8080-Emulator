@@ -62,6 +62,7 @@ void call(CPUState *state, unsigned char *opcode)
 // RET (return)
 void ret(CPUState *state)
 {
-	state->pc = state->memory[state->sp] | (state->memory[state->sp + 1] << 8);
+	state->pc = fetchFromMemory(state->memory, state->sp) | 
+		(fetchFromMemory(state->memory, state->sp + 1) << 8);
 	state->sp += 2;
 }
