@@ -39,7 +39,7 @@ void mov_r2r(uint8_t *dest, uint8_t *src)
 void mov_r2m(uint8_t *memory, uint8_t *src, uint8_t *h, uint8_t *l)
 {
 	uint16_t offs = (*h << 8) | *l;
-	memory[offs] = *src;
+	setMemoryOffset(memory, offs, *src);
 }
 
 // MOV from memory to register
@@ -60,7 +60,7 @@ void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode)
 void mvi_m(CPUState *state, unsigned char *opcode)
 {
 	uint16_t offs = (state->h << 8) | state-> l;
-	state->memory[offs] = opcode[1];
+	setMemoryOffset(state->memory, offs, opcode[1]);
 	state->pc++;
 }
 
@@ -90,15 +90,15 @@ void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory,
 // PUSH 
 void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 {
-	memory[*sp - 2] = *hi;
-	memory[*sp - 1] = *lo;
+	setMemoryOffset(memory, *sp - 2, *hi);
+	setMemoryOffset(memory, *sp - 1, *lo);
 	*sp -= 2;
 }
 
 // PUSH PSW
 void push_psw(CPUState *state)
 {
-	state->memory[state->sp - 1] = state->a;
+	setMemoryOffset(state->memory, state->sp - 1, state->a);
 	uint8_t flags = (
 		state->cc.z |
 		state->cc.s << 1 |
@@ -106,7 +106,7 @@ void push_psw(CPUState *state)
 		state->cc.cy << 3 |
 		state->cc.ac << 4
 	);
-	state->memory[state->sp - 2] = flags;
+	setMemoryOffset(state->memory, state->sp - 2, flags);
 	state->sp -= 2;
 }
 

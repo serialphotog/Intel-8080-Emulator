@@ -83,6 +83,11 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 uint8_t fetchFromMemory(uint8_t *memory, uint16_t offs);
 
 /**
+ * Sets a value in memory at offset.
+ */
+void setMemoryOffset(uint8_t *memory, uint16_t offs, uint8_t value);
+
+/**
  * Calculates the parity bit of a number.
  */
 int calculateParity(int num, int size);

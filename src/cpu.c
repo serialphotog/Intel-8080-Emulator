@@ -79,6 +79,12 @@ uint8_t fetchFromMemory(uint8_t *memory, uint16_t offs)
 	return memory[offs];
 }
 
+// Sets a memory offset to a value
+void setMemoryOffset(uint8_t *memory, uint16_t offs, uint8_t value)
+{
+	memory[offs] = value;
+}
+
 // Calculates the parity of a number
 // Parity is one if the number of one bits is even.
 int calculateParity(int num, int size)
