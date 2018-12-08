@@ -233,6 +233,24 @@ void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 	(*sp) -= 2;
 }
 
+// Performs a push PSW
+//		(SP-2) <- flags
+//		(SP-1) <- A
+//		SP <- SP - 2
+void push_psw(CPUState *state)
+{
+	state->memory[state->sp-1] = state->a;
+	uint8_t flags = (
+		state->cc.z |
+		state->cc.s << 1 |
+		state->cc.p << 2 |
+		state->cc.cy << 3 | 
+		state->cc.ac << 4
+	);
+	state->memory[state->sp-2] = flags;
+	state->sp -= 2;
+}
+
 // Performs a POP
 //		hi <- (sp+1)
 //		lo <- (sp)
@@ -242,6 +260,22 @@ void pop(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 	*lo = memory[*sp];
 	*hi = memory[(*sp)+1];
 	(*sp) += 2;
+}
+
+// Performs a POP PSW
+//		FLAGS <- (sp)
+//		A <- (sp+1)
+//		SP <- SP + 2
+void pop_psw(CPUState *state)
+{
+	state->a = state->memory[state->sp+1];
+	uint8_t flags = state->memory[state->sp];
+	state->cc.z = ((flags & 0x01) == 0x01);
+	state->cc.s = ((flags & 0x02) == 0x02);
+	state->cc.p = ((flags & 0x04) == 0x04);
+	state->cc.cy = ((flags & 0x08) == 0x08);
+	state->cc.ac = ((flags & 0x10) == 0x10);
+	state->sp += 2;
 }
 
 // Performs a DAD H instruction

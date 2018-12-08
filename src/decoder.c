@@ -953,7 +953,7 @@ int decode(CPUState *state)
 			break;
 		case 0xf1:
 			// POP PSW
-			unimplementedInstruction(state, opcode);
+			pop_psw(state);
 			break;
 		case 0xf2:
 			// JP adr
@@ -969,7 +969,7 @@ int decode(CPUState *state)
 			break;
 		case 0xf5:
 			// PUSH PSW
-			unimplementedInstruction(state, opcode);
+			push_psw(state);
 			break;
 		case 0xf6:
 			// ORI D8
