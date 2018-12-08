@@ -777,7 +777,7 @@ int decode(CPUState *state)
 			break;
 		case 0xc1:
 			// POP B
-			unimplementedInstruction(state, opcode);
+			pop(&state->b, &state->c, &state->sp, state->memory);
 			break;
 		case 0xc2:
 			// JNZ adr
