@@ -271,7 +271,7 @@ int decode(CPUState *state)
 			break;
 		case 0x3a:
 			// LDA adr
-			unimplementedInstruction(state, opcode);
+			lda(state, opcode);
 			break;
 		case 0x3b:
 			// DCX SP

@@ -92,6 +92,16 @@ void lxi(uint8_t *hi, uint8_t *lo, uint16_t *pc, unsigned char *opcode);
 void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char *opcode);
 
 /**
+ * Performs a LDA (load address) instruction.
+ *
+ * Loads the value from memory into A.
+ *
+ * RTN:
+ *		A <- (addr)
+ */
+void lda(CPUState *state, unsigned char *opcode);
+
+/**
  * Performs a LDAX (load a indirect) operation.
  *
  * RTN:

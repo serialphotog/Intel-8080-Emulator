@@ -77,6 +77,13 @@ void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char *opcode)
 	*pc += 2;
 }
 
+// LDA 
+void lda(CPUState *state, unsigned char *opcode)
+{
+	state->a = fetchFromMemory(state->memory, 
+		buildMemoryOffset(opcode[2], opcode[1]));
+}
+
 // LDAX (load a indirect)
 void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory,
 	unsigned char *opcode)
