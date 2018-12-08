@@ -83,6 +83,11 @@ void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 void swapRegisters(uint8_t *reg1, uint8_t *reg2);
 
 /**
+ * Builds a memory offset
+ */
+uint16_t buildMemoryOffset(uint8_t hi, uint8_t lo);
+
+/**
  * Retrieves a value from memory.
  */
 uint8_t fetchFromMemory(uint8_t *memory, uint16_t offs);

@@ -81,6 +81,13 @@ void swapRegisters(uint8_t *reg1, uint8_t *reg2)
 	*reg2 = tmp;
 }
 
+// Builds a memory offset
+uint16_t buildMemoryOffset(uint8_t hi, uint8_t lo)
+{
+	uint16_t offs = (hi << 8) | lo;
+	return offs;
+}
+
 // Retrieves a value from memory
 uint8_t fetchFromMemory(uint8_t *memory, uint16_t offs)
 {

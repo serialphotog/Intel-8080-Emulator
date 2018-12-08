@@ -38,15 +38,13 @@ void mov_r2r(uint8_t *dest, uint8_t *src)
 // MOV from register to memory
 void mov_r2m(uint8_t *memory, uint8_t *src, uint8_t *h, uint8_t *l)
 {
-	uint16_t offs = (*h << 8) | *l;
-	setMemoryOffset(memory, offs, *src);
+	setMemoryOffset(memory, buildMemoryOffset(*h, *l), *src);
 }
 
 // MOV from memory to register
 void mov_m2r(uint8_t *memory, uint8_t *dest, uint8_t *h, uint8_t *l) 
 {
-	uint16_t offs = (*h << 8) | *l;
-	*dest = fetchFromMemory(memory, offs);
+	*dest = fetchFromMemory(memory, buildMemoryOffset(*h, *l));
 }
 
 // MVI (move immediate) to register
@@ -59,8 +57,8 @@ void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode)
 // MVI (move immediate) to memory
 void mvi_m(CPUState *state, unsigned char *opcode)
 {
-	uint16_t offs = (state->h << 8) | state-> l;
-	setMemoryOffset(state->memory, offs, opcode[1]);
+	setMemoryOffset(state->memory, buildMemoryOffset(state->h, state->l), 
+		opcode[1]);
 	state->pc++;
 }
 
@@ -83,8 +81,7 @@ void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char *opcode)
 void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory,
 	unsigned char *opcode)
 {
-	uint16_t offs = (*hi << 8) | *lo;
-	*a = fetchFromMemory(memory, offs);
+	*a = fetchFromMemory(memory, buildMemoryOffset(*hi, *lo));
 }
 
 // PUSH 
