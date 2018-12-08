@@ -93,6 +93,11 @@ void setMemoryOffset(uint8_t *memory, uint16_t offs, uint8_t value);
 uint8_t encodeFlags(CPUState *state);
 
 /**
+ * Decodes the CPU flags from a bitstream.
+ */
+void decodeFlags(CPUState *state, uint8_t flags);
+
+/**
  * Calculates the parity bit of a number.
  */
 int calculateParity(int num, int size);

@@ -115,12 +115,7 @@ void pop(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 void pop_psw(CPUState *state)
 {
 	state->a = fetchFromMemory(state->memory, state->sp + 1);
-	uint8_t flags = fetchFromMemory(state->memory, state->sp);
-	state->cc.z = ((flags & 0x01) == 0x01);
-	state->cc.s = ((flags & 0x02) == 0x02);
-	state->cc.p = ((flags & 0x04) == 0x04);
-	state->cc.cy = ((flags & 0x08) == 0x08);
-	state->cc.ac = ((flags & 0x10) == 0x10);
+	decodeFlags(state, fetchFromMemory(state->memory, state->sp));
 	state->sp += 2;
 }
 

@@ -98,6 +98,16 @@ uint8_t encodeFlags(CPUState *state)
 	return flags;
 }
 
+// Decodes the flags from a bitstream
+void decodeFlags(CPUState *state, uint8_t flags)
+{
+	state->cc.z = ((flags & 0x01) == 0x01);
+	state->cc.s = ((flags & 0x02) == 0x02);
+	state->cc.p = ((flags & 0x04) == 0x04);
+	state->cc.cy = ((flags & 0x08) == 0x08);
+	state->cc.ac = ((flags & 0x10) == 0x10);
+}
+
 // Calculates the parity of a number
 // Parity is one if the number of one bits is even.
 int calculateParity(int num, int size)
