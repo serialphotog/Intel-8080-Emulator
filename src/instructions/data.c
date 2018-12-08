@@ -99,14 +99,7 @@ void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 void push_psw(CPUState *state)
 {
 	setMemoryOffset(state->memory, state->sp - 1, state->a);
-	uint8_t flags = (
-		state->cc.z |
-		state->cc.s << 1 |
-		state->cc.p << 2 |
-		state->cc.cy << 3 |
-		state->cc.ac << 4
-	);
-	setMemoryOffset(state->memory, state->sp - 2, flags);
+	setMemoryOffset(state->memory, state->sp - 2, encodeFlags(state));
 	state->sp -= 2;
 }
 

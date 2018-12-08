@@ -88,6 +88,11 @@ uint8_t fetchFromMemory(uint8_t *memory, uint16_t offs);
 void setMemoryOffset(uint8_t *memory, uint16_t offs, uint8_t value);
 
 /**
+ * Encodes the CPU flags into a bitstream.
+ */
+uint8_t encodeFlags(CPUState *state);
+
+/**
  * Calculates the parity bit of a number.
  */
 int calculateParity(int num, int size);
