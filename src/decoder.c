@@ -913,7 +913,7 @@ int decode(CPUState *state)
 			break;
 		case 0xe6:
 			// ANI D8
-			unimplementedInstruction(state, opcode);
+			ani(state, opcode);
 			break;
 		case 0xe7:
 			// RST 4

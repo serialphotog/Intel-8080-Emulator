@@ -114,4 +114,7 @@ void out(CPUState *state);
 // Performs an RRC instruction
 void rrc(CPUState *state);
 
+// Performs an ANI instruction
+void ani(CPUState *state, unsigned char *opcode);
+
 #endif

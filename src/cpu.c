@@ -332,3 +332,16 @@ void rrc(CPUState *state)
 	state->a = ((prevA & 0x01) << 7) | (prevA >> 1);
 	state->cc.cy = ((prevA & 0x01) == 0x01);
 }
+
+// Performs an ANI instruction
+//		A <- A & D8
+//		FLAGS: Z, S, P, CY, AC
+void ani(CPUState *state, unsigned char *opcode)
+{
+	state->a = state->a & opcode[1];
+	state->cc.cy = state->cc.ac = 0;
+	state->cc.z = (state->a == 0);
+	state->cc.s = ((state->a & 0x80) == 0x80);
+	state->cc.p = calculateParity(state->a, 8);
+	state->pc++;
+}
