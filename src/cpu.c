@@ -230,6 +230,17 @@ void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 {
 	memory[(*sp)-2] = *hi;
 	memory[(*sp)-1] = *lo;
+	(*sp) -= 2;
+}
+
+// Performs a POP
+//		hi <- (sp+1)
+//		lo <- (sp)
+//		sp <- sp + 2
+void pop(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
+{
+	*lo = memory[*sp];
+	*hi = memory[(*sp)+1];
 	(*sp) += 2;
 }
 
