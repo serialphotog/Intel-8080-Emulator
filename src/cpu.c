@@ -320,3 +320,15 @@ void out(CPUState *state)
 {
 	state->pc++;
 }
+
+// Performs an RRC instruction
+//		A = A >> 1
+//		bit 7 = previous bit
+//		CY = previous bit 0
+//		FLAGS: CY
+void rrc(CPUState *state)
+{
+	uint8_t prevA = state->a;
+	state->a = ((prevA & 0x01) << 7) | (prevA >> 1);
+	state->cc.cy = ((prevA & 0x01) == 0x01);
+}

@@ -111,4 +111,7 @@ void xchg(CPUState *state);
 // TOOD: I have no idea how to implement this currently...
 void out(CPUState *state);
 
+// Performs an RRC instruction
+void rrc(CPUState *state);
+
 #endif

@@ -81,7 +81,7 @@ int decode(CPUState *state)
 			break;
 		case 0x0f:
 			// RRC
-			unimplementedInstruction(state, opcode);
+			rrc(state);
 			break;
 		case 0x11:
 			// LXI D, D16
