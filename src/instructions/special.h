@@ -40,4 +40,11 @@
  */
 void out(CPUState *state);
 
+/**
+ * Performs an EI (enable interrupts) operation.
+ *
+ * This mearly sets a flag in the CPU state
+ */
+void ei(CPUState *state);
+
 #endif

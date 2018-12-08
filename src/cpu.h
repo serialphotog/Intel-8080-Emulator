@@ -54,7 +54,7 @@ typedef struct CPUState {
 	uint16_t pc;
 	uint8_t *memory;
 	struct ConditionCodes cc; // CPU Flags
-	uint8_t int_enable;
+	uint8_t int_enable; // Tracks if interrupts are enables or disabled
 } CPUState;
 
 /**

@@ -1027,7 +1027,7 @@ int decode(CPUState *state)
 			break;
 		case 0xfb:
 			// EI
-			unimplementedInstruction(state, opcode);
+			ei(state);
 			break;
 		case 0xfc:
 			// CM adr

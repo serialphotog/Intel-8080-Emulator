@@ -34,3 +34,9 @@ void out(CPUState *state)
 	// TODO: Implement this. For now, just continue executing.
 	state->pc++;
 }
+
+// EI (enable interrupts)
+void ei(CPUState *state)
+{
+	state->int_enable = 1;
+}
