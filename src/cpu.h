@@ -101,4 +101,8 @@ void dad(uint8_t *h, uint8_t *l, uint8_t *hi, uint8_t *lo, CPUState *state);
 // Performs an XCHG
 void xchg(CPUState *state);
 
+// Performs an OUT instruction
+// TOOD: I have no idea how to implement this currently...
+void out(CPUState *state);
+
 #endif

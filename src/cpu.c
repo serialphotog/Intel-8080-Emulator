@@ -279,3 +279,10 @@ void xchg(CPUState *state)
 	state->l = state->e;
 	state->e = tmp;
 }
+
+// Performs an OUT instruction
+// TOOD: I have no idea how to implement this currently...
+void out(CPUState *state)
+{
+	state->pc++;
+}

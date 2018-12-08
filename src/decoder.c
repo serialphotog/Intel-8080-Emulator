@@ -845,7 +845,7 @@ int decode(CPUState *state)
 			break;
 		case 0xd3:
 			// OUT D8
-			unimplementedInstruction(state, opcode);
+			out(state);
 			break;
 		case 0xd4:
 			// CNC adr
