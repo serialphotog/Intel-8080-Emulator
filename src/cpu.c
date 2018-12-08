@@ -73,6 +73,14 @@ void printDebug(CPUState *state)
 		state->sp);
 }
 
+// Swaps register values
+void swapRegisters(uint8_t *reg1, uint8_t *reg2)
+{
+	uint8_t tmp = *reg1;
+	*reg1 = *reg2;
+	*reg2 = tmp;
+}
+
 // Retrieves a value from memory
 uint8_t fetchFromMemory(uint8_t *memory, uint16_t offs)
 {

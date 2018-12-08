@@ -122,10 +122,6 @@ void pop_psw(CPUState *state)
 // XCHG (exchange)
 void xchg(CPUState *state)
 {
-	uint8_t tmp = state->h;
-	state->h = state->d;
-	state->d = tmp;
-	tmp = state->l;
-	state->l = state->e;
-	state->e = tmp;
+	swapRegisters(&state->h, &state->d);
+	swapRegisters(&state->l, &state->e);
 }

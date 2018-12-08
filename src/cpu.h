@@ -78,6 +78,11 @@ void printDebug(CPUState *state);
 void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 
 /**
+ * Swaps the values in two registers.
+ */
+void swapRegisters(uint8_t *reg1, uint8_t *reg2);
+
+/**
  * Retrieves a value from memory.
  */
 uint8_t fetchFromMemory(uint8_t *memory, uint16_t offs);
