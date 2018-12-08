@@ -117,4 +117,7 @@ void rrc(CPUState *state);
 // Performs an ANI instruction
 void ani(CPUState *state, unsigned char *opcode);
 
+// Performs an ADI instruction
+void adi(CPUState *state, unsigned char *opcode);
+
 #endif

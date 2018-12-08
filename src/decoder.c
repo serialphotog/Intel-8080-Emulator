@@ -797,7 +797,7 @@ int decode(CPUState *state)
 			break;
 		case 0xc6:
 			// ADI D8
-			unimplementedInstruction(state, opcode);
+			adi(state, opcode);
 			break;
 		case 0xc7:
 			// RST 0

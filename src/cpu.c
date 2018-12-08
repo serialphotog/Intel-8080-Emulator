@@ -345,3 +345,17 @@ void ani(CPUState *state, unsigned char *opcode)
 	state->cc.p = calculateParity(state->a, 8);
 	state->pc++;
 }
+
+// Performs an ADI instruction
+//		A <- A + D8
+//		FLAGS: Z, S, P, CY, AC
+void adi(CPUState *state, unsigned char *opcode)
+{
+	uint16_t res = (uint16_t) state->a + (uint16_t) opcode[1];
+	state->a = (uint8_t) res;
+	state->cc.z = ((res & 0xff) == 0);
+	state->cc.s = ((res & 0x80) == 0x80);
+	state->cc.p = calculateParity((res & 0xff), 8);
+	state->cc.cy = (res > 0xff);
+	state->pc++;
+}
