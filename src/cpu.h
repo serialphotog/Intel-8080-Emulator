@@ -32,14 +32,13 @@
 
 #include <stdint.h>
 
-// Conditional codes
+// The CPU Flags
 typedef struct ConditionCodes {
-	uint8_t	z:1;
-	uint8_t s:1;
-	uint8_t p:1;
-	uint8_t cy:1;
-	uint8_t ac:1;
-	uint8_t pad:3;
+	uint8_t	z:1; // Zero 
+	uint8_t s:1; // Sign
+	uint8_t p:1; // Parity
+	uint8_t cy:1; // Carry
+	uint8_t ac:1; // Auxilary Carry
 } ConditionCodes;
 
 // Tracks the current state of the CPU
@@ -54,20 +53,33 @@ typedef struct CPUState {
 	uint16_t sp;
 	uint16_t pc;
 	uint8_t *memory;
-	struct ConditionCodes cc;
+	struct ConditionCodes cc; // CPU Flags
 	uint8_t int_enable;
 } CPUState;
 
-// Initializes the state for the CPU
+/**
+ * Initializes the CPU state.
+ */
 CPUState* InitCPUState();
 
-// Run the fetch execute cycle
+/**
+ * Runs the CPU's fetch-execute cycle.
+ */
 void runCPU(CPUState *state);
 
-// Read a binary file into memory
+/**
+ * Prints the debug info to the termianl.
+ */
+void printDebug(CPUState *state);
+
+/**
+ * Reads a binary file into memory at a given offset.
+ */
 void loadFileIntoMemoryAtOffset(CPUState *state, char *file, uint32_t offset);
 
-// Calculates the parity of a number
+/**
+ * Calculates the parity bit of a number.
+ */
 int calculateParity(int num, int size);
 
 #endif

@@ -55,15 +55,22 @@ void runCPU(CPUState *state)
 		complete = decode(state);
 
 		// Print debug info
-		printf("\t");
-		printf("%c", state->cc.z ? 'z' : '.');
-		printf("%c", state->cc.s ? 's' : '.');
-		printf("%c", state->cc.p ? 'p' : '.');
-		printf("%c", state->cc.cy ? 'c' : '.');
-		printf("%c", state->cc.ac ? 'a' : '.');
-		printf(" A $%02x B $%02x C %02x D $%02x E $%02x H $%02x L $%02x SP %04x\n",
-			state->a, state->b, state->c, state->d, state->e, state->h, state->l, state->sp);
+		printDebug(state);
 	}
+}
+
+// Prints debug to console
+void printDebug(CPUState *state)
+{
+	printf("\t");
+	printf("%c", state->cc.z ? 'z' : '.');
+	printf("%c", state->cc.s ? 's' : '.');
+	printf("%c", state->cc.p ? 'p' : '.');
+	printf("%c", state->cc.cy ? 'c' : '.');
+	printf("%c", state->cc.ac ? 'a' : '.');
+	printf(" A $%02x B $%02x C %02x D $%02x E $%02x H $%02x L $%02x SP %04x\n",
+		state->a, state->b, state->c, state->d, state->e, state->h, state->l, 
+		state->sp);
 }
 
 // Calculates the parity of a number
