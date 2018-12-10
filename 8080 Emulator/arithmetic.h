@@ -26,8 +26,7 @@
  *
  ******************************************************************************/
 
-#ifndef __ARITHMETIC_H__
-#define __ARITHMETIC_H__
+#pragma once
 
 #include "cpu.h"
 
@@ -92,5 +91,3 @@ void inx(uint8_t *reg1, uint8_t *reg2);
  *		Zero (Z), Sign (S), Parity (P), Auxilary Carry (AC)
  */
 void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode);
-
-#endif

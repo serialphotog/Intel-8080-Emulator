@@ -26,8 +26,7 @@
  *
  ******************************************************************************/
 
-#ifndef __LOGIC_H__
-#define __LOGIC_H__
+#pragma once
 
 #include "cpu.h"
 
@@ -97,5 +96,3 @@ void cpi(CPUState *state, unsigned char *opcode);
  *		Carry (CY)
  */
 void rrc(CPUState *state);
-
-#endif

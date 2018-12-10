@@ -27,8 +27,7 @@
  *
  ******************************************************************************/
 
-#ifndef __CPU_H__
-#define __CPU_H__
+#pragma once
 
 #include <stdint.h>
 
@@ -121,5 +120,3 @@ void decodeFlags(CPUState *state, uint8_t flags);
  * Calculates the parity bit of a number.
  */
 int calculateParity(int num, int size);
-
-#endif

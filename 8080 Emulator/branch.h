@@ -26,8 +26,7 @@
  *
  ******************************************************************************/
 
-#ifndef __BRANCH_H__
-#define __BRANCH_H__
+#pragma once
 
 #include "cpu.h"
 
@@ -70,5 +69,3 @@ void call(CPUState *state, unsigned char *opcode);
  *		SP <- SP + 2
  */
 void ret(CPUState *state);
-
-#endif

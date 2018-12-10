@@ -26,8 +26,7 @@
  *
  ******************************************************************************/
 
-#ifndef __SPECIAL_H__
-#define __SPECIAL_H__
+#pragma once
 
 #include "cpu.h"
 
@@ -46,5 +45,3 @@ void out(CPUState *state);
  * This mearly sets a flag in the CPU state
  */
 void ei(CPUState *state);
-
-#endif

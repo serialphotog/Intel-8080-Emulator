@@ -26,8 +26,7 @@
  *
  ******************************************************************************/
 
-#ifndef __DATA_H__
-#define __DATA_H__
+#pragma once
 
 #include "cpu.h"
 
@@ -176,5 +175,3 @@ void pop_psw(CPUState *state);
  *		L <-> E
  */
 void xchg(CPUState *state);
-
-#endif
