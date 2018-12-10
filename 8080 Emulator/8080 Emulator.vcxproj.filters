@@ -25,6 +25,12 @@
     <Filter Include="Header Files\cpu\instructions">
       <UniqueIdentifier>{80551899-dc50-4758-9679-77bb5c9acdc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\util">
+      <UniqueIdentifier>{9b8bfd5a-f8c2-4173-91cf-36f9bdd49541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{af433bda-3375-480b-b4fd-b963a5b388d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -54,6 +60,9 @@
     <ClCompile Include="special.c">
       <Filter>Source Files\cpu\instructions</Filter>
     </ClCompile>
+    <ClCompile Include="time.c">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cpu.h">
@@ -79,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="special.h">
       <Filter>Header Files\cpu\instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="time.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: arithmetic.h
+ * File: time.c
  *
  * Purpose:
- *		A software emulator for the Intel 8080 CPU.
+ *		Provides an equivilant of the *nix interface for working with time.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -18,7 +18,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT .IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -26,33 +26,26 @@
  *
  ******************************************************************************/
 
-#include "cpu.h"
-
 #include "time.h"
 
-#include <stdio.h>
+#include <stdint.h>
 
-// Gets the current time in milliseconds
-double getTimeMilliseconds()
+// Gets the current time of day
+int gettimeofday(struct timeval *tp, struct timezone *tzp)
 {
-	struct timeval currentTime;
-	gettimeofday(&currentTime, NULL);
-	return ((double)currentTime.tv_sec * 1E6) + ((double)currentTime.tv_usec);
-}
+	// Time since the EPOCH
+	static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);
 
-// Let's do this!
-int main(int argc, char **argv)
-{
-	// Initialize the CPU state
-	CPUState *state = InitCPUState();
+	SYSTEMTIME  system_time;
+	FILETIME    file_time;
+	uint64_t    time;
 
-	// Load test code into memory
-	loadFileIntoMemoryAtOffset(state, "../invaders.h", 0);
-	loadFileIntoMemoryAtOffset(state, "../invaders.g", 0x800);
-	loadFileIntoMemoryAtOffset(state, "../invaders.f", 0x1000);
-	loadFileIntoMemoryAtOffset(state, "../invaders.e", 0x1800);
+	GetSystemTime(&system_time);
+	SystemTimeToFileTime(&system_time, &file_time);
+	time = ((uint64_t)file_time.dwLowDateTime);
+	time += ((uint64_t)file_time.dwHighDateTime) << 32;
 
-	runCPU(state);
-
+	tp->tv_sec = (long)((time - EPOCH) / 10000000L);
+	tp->tv_usec = (long)(system_time.wMilliseconds * 1000);
 	return 0;
 }
