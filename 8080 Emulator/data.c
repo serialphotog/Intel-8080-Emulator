@@ -7,29 +7,29 @@
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to deal 
- * in the Software without restriction, including without limitation the rights 
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
- * copies of the Software, and to permit persons to whom the Software is 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in 
+ * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
  ******************************************************************************/
 
 #include "data.h"
 
-// MOV between two registers
+ // MOV between two registers
 void mov_r2r(uint8_t *dest, uint8_t *src)
 {
 	*dest = *src;
@@ -42,7 +42,7 @@ void mov_r2m(uint8_t *memory, uint8_t *src, uint8_t *h, uint8_t *l)
 }
 
 // MOV from memory to register
-void mov_m2r(uint8_t *memory, uint8_t *dest, uint8_t *h, uint8_t *l) 
+void mov_m2r(uint8_t *memory, uint8_t *dest, uint8_t *h, uint8_t *l)
 {
 	*dest = fetchFromMemory(memory, buildMemoryOffset(*h, *l));
 }
@@ -57,7 +57,7 @@ void mvi(uint8_t *reg, uint16_t *pc, unsigned char *opcode)
 // MVI (move immediate) to memory
 void mvi_m(CPUState *state, unsigned char *opcode)
 {
-	setMemoryOffset(state->memory, buildMemoryOffset(state->h, state->l), 
+	setMemoryOffset(state->memory, buildMemoryOffset(state->h, state->l),
 		opcode[1]);
 	state->pc++;
 }
@@ -80,7 +80,7 @@ void lxi_16(uint16_t *reg, uint16_t *pc, unsigned char *opcode)
 // LDA 
 void lda(CPUState *state, unsigned char *opcode)
 {
-	state->a = fetchFromMemory(state->memory, 
+	state->a = fetchFromMemory(state->memory,
 		buildMemoryOffset(opcode[2], opcode[1]));
 	state->pc += 2;
 }
