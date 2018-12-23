@@ -31,6 +31,7 @@
 #include "time.h"
 
 #include <stdio.h>
+#include <Windows.h>
 
 // Gets the current time in milliseconds
 double getTimeMilliseconds()
@@ -38,6 +39,18 @@ double getTimeMilliseconds()
 	struct timeval currentTime;
 	gettimeofday(&currentTime, NULL);
 	return ((double)currentTime.tv_sec * 1E6) + ((double)currentTime.tv_usec);
+}
+
+// Runs the CPU run thread
+DWORD WINAPI emulatorThreadFunc(void *data)
+{
+	// Initialize the CPU state
+	CPUState *state = (CPUState*)data;
+
+	// Run the CPU
+	runCPU(state);
+
+	return 0;
 }
 
 // Let's do this!
@@ -52,7 +65,12 @@ int main(int argc, char **argv)
 	loadFileIntoMemoryAtOffset(state, "../invaders.f", 0x1000);
 	loadFileIntoMemoryAtOffset(state, "../invaders.e", 0x1800);
 
-	runCPU(state);
+	// Do the run thread
+	HANDLE runThread = CreateThread(NULL, 0, emulatorThreadFunc, state, 0, NULL);
+	if (runThread) 
+	{
+		WaitForSingleObject(runThread, INFINITE);
+	}
 
 	return 0;
 }
