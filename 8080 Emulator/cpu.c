@@ -45,20 +45,28 @@ CPUState* InitCPUState()
 }
 
 // Run the fetch execute cycle
-void runCPU(CPUState *state)
+int runCPUCycle(CPUState *state)
 {
-	int complete = 0;
+	printf("\t");
+	disassembleInstruction(state->memory, state->pc);
+	int complete = decode(state);
 
-	while (complete == 0)
-	{
-		printf("\t");
-		disassembleInstruction(state->memory, state->pc);
+	// Print the debug info
+	printDebug(state);
 
-		complete = decode(state);
+	return complete;
+}
 
-		// Print debug info
-		printDebug(state);
-	}
+// Raises an interrupt
+void raiseInterrupt(CPUState *state, int interruptCode)
+{
+	// Push PC to the stack
+	state->memory[state->sp - 1] = ((state->pc & 0xff00) >> 8);
+	state->memory[state->sp - 2] = (state->pc & 0xff);
+
+	// Set PC to the interrupt handler
+	state->pc = 8 * interruptCode;
+	state->int_enable = 0;
 }
 
 // Prints debug to console

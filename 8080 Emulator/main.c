@@ -47,8 +47,31 @@ DWORD WINAPI emulatorThreadFunc(void *data)
 	// Initialize the CPU state
 	CPUState *state = (CPUState*)data;
 
-	// Run the CPU
-	runCPU(state);
+	int complete = 0;
+	double timeNow;
+	int interrupt = 1;
+	double previousInterrupt = 0.0;
+
+	while (complete == 0) 
+	{
+		complete = runCPUCycle(state);
+		timeNow = getTimeMilliseconds();
+
+		// Handle interrupts
+		if (timeNow - previousInterrupt > 16667) // if 1/60 of a second has elapsed
+		{
+			// We only want to perform an interrupt when they are enabled
+			if (state->int_enable)
+			{
+				if (interrupt == 1)
+					interrupt = 2;
+				if (interrupt == 2)
+					interrupt = 1;
+				raiseInterrupt(state, 2);
+				previousInterrupt = timeNow;
+			}
+		}
+	}
 
 	return 0;
 }

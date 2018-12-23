@@ -64,7 +64,12 @@ CPUState* InitCPUState();
 /**
  * Runs the CPU's fetch-execute cycle.
  */
-void runCPU(CPUState *state);
+int runCPUCycle(CPUState *state);
+
+/**
+ * Raises an interrupt within the CPU
+*/
+void raiseInterrupt(CPUState *state, int interruptCode);
 
 /**
  * Prints the debug info to the termianl.
