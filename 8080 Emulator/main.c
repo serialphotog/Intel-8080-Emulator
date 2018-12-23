@@ -27,6 +27,7 @@
  ******************************************************************************/
 
 #include "cpu.h"
+#include "display.h"
 
 #include "time.h"
 
@@ -90,10 +91,18 @@ int main(int argc, char **argv)
 
 	// Do the run thread
 	HANDLE runThread = CreateThread(NULL, 0, emulatorThreadFunc, state, 0, NULL);
+
+	// Setup the display
+	DisplayState *displayState = initDisplay();
+	runDisplay(displayState);
+
 	if (runThread) 
 	{
 		WaitForSingleObject(runThread, INFINITE);
 	}
+
+	// Perform cleanup
+	destroyDisplay(displayState);
 
 	return 0;
 }

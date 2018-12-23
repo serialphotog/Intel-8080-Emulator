@@ -63,6 +63,9 @@
     <ClCompile Include="time.c">
       <Filter>Source Files\util</Filter>
     </ClCompile>
+    <ClCompile Include="display.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cpu.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="time.h">
       <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="display.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -130,6 +130,7 @@
     <ClCompile Include="data.c" />
     <ClCompile Include="decoder.c" />
     <ClCompile Include="disasm.c" />
+    <ClCompile Include="display.c" />
     <ClCompile Include="logic.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="special.c" />
@@ -142,6 +143,7 @@
     <ClInclude Include="data.h" />
     <ClInclude Include="decoder.h" />
     <ClInclude Include="disasm.h" />
+    <ClInclude Include="display.h" />
     <ClInclude Include="logic.h" />
     <ClInclude Include="special.h" />
     <ClInclude Include="time.h" />
