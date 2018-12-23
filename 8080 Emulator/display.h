@@ -27,3 +27,8 @@ void runDisplay(DisplayState *state);
  * Destroys the display object
 */
 void destroyDisplay(DisplayState *state);
+
+/**
+ * handles events from the machine
+*/
+void handleEvent(const sfEvent *event);

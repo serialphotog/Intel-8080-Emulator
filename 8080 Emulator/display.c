@@ -31,6 +31,24 @@ void runDisplay(DisplayState *state)
 			{
 				sfWindow_close(state->renderWindow);
 			}
+
+			// Otherwise, handle all other events
+			handleEvent(&event);
+		}
+	}
+}
+
+// Handles events from the emulated machine
+void handleEvent(const sfEvent *event)
+{
+	// Handle key press events
+	if (event->type == sfEvtKeyPressed)
+	{
+		switch (event->key.code)
+		{
+		default:
+			// Unsupported/unimplemented keypress. Do nothing
+			break;
 		}
 	}
 }
