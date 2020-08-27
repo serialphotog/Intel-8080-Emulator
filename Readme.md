@@ -2,6 +2,10 @@
 
 This is a very much work in progress emulator for the Intel 8080 microprocessor. This is being developed purely as an educational exercise to get more familiar with emulation techniques. 
 
+# The Rom
+
+If you decide to play with this you'll notice that it's currently hardcoded to load a space invaders ROM. These ROM files are not included in the public release of this code due to intellectual property issues. It'll be up to you to find the ROM files if you decide to play with this.
+
 ## License
 
 Copyright 2018 Adam Thompson <adam@serialphotog.com>
