@@ -28,10 +28,10 @@
 
 #define _CRT_SECURE_NO_WARNINGS // Stop visual studio from complaining about insecure functions
 
-#include "cpu.h"
+#include "sys/cpu.h"
 
-#include "decoder.h"
-#include "disasm.h"
+#include "sys/decoder.h"
+#include "sys/disasm.h"
 
 #include <stdio.h>
 #include <stdlib.h>

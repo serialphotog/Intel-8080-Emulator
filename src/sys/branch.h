@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: logic.c
+ * File: branch.h
  *
  * Purpose:
- *		The various logical operations supported by the Intel 8080.
+ *		Specification of the various branching statements supported by the CPU.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -26,45 +26,46 @@
  *
  ******************************************************************************/
 
-#include "logic.h"
+#pragma once
 
- // ANA (and a)
-void ana(CPUState *state, uint8_t *reg)
-{
-	state->a = state->a & *reg;
-	setFlagsFromA(state);
-}
+#include "sys/cpu.h"
 
-// ANI (and immediate with A)
-void ani(CPUState *state, unsigned char *opcode)
-{
-	state->a = state->a & opcode[1];
-	setFlagsFromA(state);
-	state->pc++;
-}
+#include <stdint.h>
 
-// XRA (xor with a)
-void xra(CPUState *state, uint8_t *reg)
-{
-	state->a = state->a ^ *reg;
-	setFlagsFromA(state);
-}
+ /**
+  * Performs a JMP (unconditional jump) operation.
+  *
+  * RTN:
+  *		PC <- addr
+  */
+void jmp(CPUState *state, unsigned char *opcode);
 
-// CPI (compare immediate with A)
-void cpi(CPUState *state, unsigned char *opcode)
-{
-	uint8_t res = state->a - opcode[1];
-	state->cc.z = (res == 0);
-	state->cc.s = ((res & 0x80) == 0x80);
-	state->cc.p = calculateParity(res, 8);
-	state->cc.cy = (state->a < opcode[1]);
-	state->pc++;
-}
+/**
+ * Performs a JNZ (jump on no zero) operation.
+ *
+ * RTN:
+ *		if Z != 0 then
+ *			PC <- addr
+ */
+void jnz(CPUState *state, unsigned char *opcode);
 
-// RRC (Rotate A right)
-void rrc(CPUState *state)
-{
-	uint8_t previousA = state->a;
-	state->a = ((previousA & 0x01) << 7) | (previousA >> 1);
-	state->cc.cy = ((previousA & 0x01) == 0x01);
-}
+/**
+ * Performs a CALL (unconditional call) operation.
+ *
+ * RTN:
+ *		(SP - 1) <- PC.hi
+ *		(SP - 2) <- PC.lo
+ *		SP <- SP + 2
+ *		PC <- addr
+ */
+void call(CPUState *state, unsigned char *opcode);
+
+/**
+ * Performs a RET (return) instruction.
+ *
+ * RTN:
+ *		PC.lo <- (SP)
+ *		PC.hi <- (SP + 1)
+ *		SP <- SP + 2
+ */
+void ret(CPUState *state);

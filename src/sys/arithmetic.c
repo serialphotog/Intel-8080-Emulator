@@ -26,7 +26,7 @@
  *
  ******************************************************************************/
 
-#include "arithmetic.h"
+#include "sys/arithmetic.h"
 
  // ADI (add immediate)
 void adi(CPUState *state, unsigned char *opcode)

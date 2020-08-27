@@ -26,11 +26,11 @@
  *
  ******************************************************************************/
 
-#include "cpu.h"
+#include "sys/cpu.h"
 
 #ifdef _Win32
   #include "time.h"
-  #include<Windows.h>
+  #include <Windows.h>
 #else
   #include<sys/time.h>
   #include<pthread.h>

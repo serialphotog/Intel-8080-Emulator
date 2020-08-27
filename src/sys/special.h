@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: logic.h
+ * File: special.h
  *
  * Purpose:
- *		Specification for the various logical operations supported by the CPU.
+ *		Specification for sepcial operations performed by the CPU.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -28,71 +28,20 @@
 
 #pragma once
 
-#include "cpu.h"
-
-#include <stdint.h>
+#include "sys/cpu.h"
 
  /**
-  * Performs an ANA (and a) instruction.
+  * Performs an OUT operation.
   *
-  * Ands a register with the value in A.
-  *
-  * RTN:
-  *		A <- A & REGISTER
-  *
-  * FLAGS:
-  *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
+  * NOTE: I'm not currently sure how this should be implemented. This is
+  * currently just a stub implementation to allow the CPU to continue executing
+  * when it encounters this instruction.
   */
-void ana(CPUState *state, uint8_t *reg);
-
-/*
- * Performs an ANI (and immediate) instruction.
- *
- * ANI performs an immediate and with the A register.
- *
- * RTN:
- *		A <- A & D8
- *
- * FLAGS:
- *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxillary Carry (AC)
- */
-void ani(CPUState *state, unsigned char *opcode);
+void out(CPUState *state);
 
 /**
- * Performs an XRA (xor with a) operationl
+ * Performs an EI (enable interrupts) operation.
  *
- * XORs a register with the A register.
- *
- * RTN:
- *		A <- A ^ REGISTER
- *
- * FLAGS:
- *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
+ * This mearly sets a flag in the CPU state
  */
-void xra(CPUState *state, uint8_t *reg);
-
-/**
- * Performs a CPI (compare immediate with A) operation.
- *
- * RTN:
- *		A - data
- *
- * FLAGS:
- *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
- */
-void cpi(CPUState *state, unsigned char *opcode);
-
-/*
- * Performs an RRC instruction.
- *
- * RRC rotates the A register right.
- *
- * RTN:
- *		A = A >> 1
- *		bit 7 = previous bit
- *		CY = previous bit 0
- *
- * FLAGS:
- *		Carry (CY)
- */
-void rrc(CPUState *state);
+void ei(CPUState *state);

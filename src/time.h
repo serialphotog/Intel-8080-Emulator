@@ -28,6 +28,8 @@
 
 #pragma once
 
+#ifdef _Win32
+
 #include <Windows.h>
 
 /**
@@ -52,3 +54,4 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
   return 0;
 }
 
+#endif // _Win32

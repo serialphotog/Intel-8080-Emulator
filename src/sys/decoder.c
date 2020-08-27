@@ -26,16 +26,16 @@
  *
  ******************************************************************************/
 
-#include "cpu.h"
+#include "sys/cpu.h"
 
-#include "decoder.h"
-#include "disasm.h"
+#include "sys/decoder.h"
+#include "sys/disasm.h"
 
-#include "arithmetic.h"
-#include "branch.h"
-#include "data.h"
-#include "logic.h"
-#include "special.h"
+#include "sys/arithmetic.h"
+#include "sys/branch.h"
+#include "sys/data.h"
+#include "sys/logic.h"
+#include "sys/special.h"
 
 #include <stdio.h>
 #include <stdlib.h>

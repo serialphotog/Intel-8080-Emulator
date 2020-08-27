@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: special.h
+ * File: logic.c
  *
  * Purpose:
- *		Specification for sepcial operations performed by the CPU.
+ *		The various logical operations supported by the Intel 8080.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -26,22 +26,45 @@
  *
  ******************************************************************************/
 
-#pragma once
+#include "sys/logic.h"
 
-#include "cpu.h"
+ // ANA (and a)
+void ana(CPUState *state, uint8_t *reg)
+{
+	state->a = state->a & *reg;
+	setFlagsFromA(state);
+}
 
- /**
-  * Performs an OUT operation.
-  *
-  * NOTE: I'm not currently sure how this should be implemented. This is
-  * currently just a stub implementation to allow the CPU to continue executing
-  * when it encounters this instruction.
-  */
-void out(CPUState *state);
+// ANI (and immediate with A)
+void ani(CPUState *state, unsigned char *opcode)
+{
+	state->a = state->a & opcode[1];
+	setFlagsFromA(state);
+	state->pc++;
+}
 
-/**
- * Performs an EI (enable interrupts) operation.
- *
- * This mearly sets a flag in the CPU state
- */
-void ei(CPUState *state);
+// XRA (xor with a)
+void xra(CPUState *state, uint8_t *reg)
+{
+	state->a = state->a ^ *reg;
+	setFlagsFromA(state);
+}
+
+// CPI (compare immediate with A)
+void cpi(CPUState *state, unsigned char *opcode)
+{
+	uint8_t res = state->a - opcode[1];
+	state->cc.z = (res == 0);
+	state->cc.s = ((res & 0x80) == 0x80);
+	state->cc.p = calculateParity(res, 8);
+	state->cc.cy = (state->a < opcode[1]);
+	state->pc++;
+}
+
+// RRC (Rotate A right)
+void rrc(CPUState *state)
+{
+	uint8_t previousA = state->a;
+	state->a = ((previousA & 0x01) << 7) | (previousA >> 1);
+	state->cc.cy = ((previousA & 0x01) == 0x01);
+}

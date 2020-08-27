@@ -1,14 +1,15 @@
 set (EMU_SRCS
-  arithmetic.c
-  branch.c
-  cpu.c
-  data.c
-  decoder.c
-  disasm.c
-  logic.c
+ sys/arithmetic.c
+  sys/branch.c
+  sys/cpu.c
+  sys/data.c
+  sys/decoder.c
+  sys/disasm.c
+  sys/logic.c
+  sys/special.c
   main.c
-  special.c
 )
+include_directories(.)
 
 add_executable(${PROJECT_NAME} ${EMU_SRCS})
 target_link_libraries(${PROJECT_NAME} Threads::Threads)

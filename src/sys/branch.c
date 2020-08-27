@@ -1,8 +1,9 @@
 /*******************************************************************************
- * File: special
+ * File: branch.c
  *
  * Purpose:
- *		The various special operations supported by the CPU.
+ *		The various branch instructions supported by the Intel 8080. These
+ *		include calls such as jumps and calls.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -26,17 +27,42 @@
  *
  ******************************************************************************/
 
-#include "special.h"
+#include "sys/branch.h"
 
- // OUT
-void out(CPUState *state)
+#include "sys/data.h"
+
+ // JMP (unconditional jump)
+void jmp(CPUState *state, unsigned char *opcode)
 {
-	// TODO: Implement this. For now, just continue executing.
-	state->pc++;
+	state->pc = (opcode[2] << 8) | opcode[1];
 }
 
-// EI (enable interrupts)
-void ei(CPUState *state)
+// JNZ (jump not zero)
+void jnz(CPUState *state, unsigned char *opcode)
 {
-	state->int_enable = 1;
+	if (state->cc.z == 0)
+		jmp(state, opcode);
+	else
+		state->pc += 2;
+}
+
+// CALL (unconditional call)
+void call(CPUState *state, unsigned char *opcode)
+{
+	// PUSH our return location on to the stack
+	uint16_t ret = state->pc + 2;
+	uint8_t hi = (ret & 0xff);
+	uint8_t lo = (ret >> 8) & 0xff;
+	push(&hi, &lo, &state->sp, state->memory);
+
+	// Jump to the desired location
+	jmp(state, opcode);
+}
+
+// RET (return)
+void ret(CPUState *state)
+{
+	state->pc = fetchFromMemory(state->memory, state->sp) |
+		(fetchFromMemory(state->memory, state->sp + 1) << 8);
+	state->sp += 2;
 }

@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: branch.h
+ * File: logic.h
  *
  * Purpose:
- *		Specification of the various branching statements supported by the CPU.
+ *		Specification for the various logical operations supported by the CPU.
  *
  * Copyright 2018 Adam Thompson <adam@serialphotog.com>
  *
@@ -28,44 +28,71 @@
 
 #pragma once
 
-#include "cpu.h"
+#include "sys/cpu.h"
 
 #include <stdint.h>
 
  /**
-  * Performs a JMP (unconditional jump) operation.
+  * Performs an ANA (and a) instruction.
+  *
+  * Ands a register with the value in A.
   *
   * RTN:
-  *		PC <- addr
+  *		A <- A & REGISTER
+  *
+  * FLAGS:
+  *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
   */
-void jmp(CPUState *state, unsigned char *opcode);
+void ana(CPUState *state, uint8_t *reg);
 
-/**
- * Performs a JNZ (jump on no zero) operation.
+/*
+ * Performs an ANI (and immediate) instruction.
+ *
+ * ANI performs an immediate and with the A register.
  *
  * RTN:
- *		if Z != 0 then
- *			PC <- addr
+ *		A <- A & D8
+ *
+ * FLAGS:
+ *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxillary Carry (AC)
  */
-void jnz(CPUState *state, unsigned char *opcode);
+void ani(CPUState *state, unsigned char *opcode);
 
 /**
- * Performs a CALL (unconditional call) operation.
+ * Performs an XRA (xor with a) operationl
+ *
+ * XORs a register with the A register.
  *
  * RTN:
- *		(SP - 1) <- PC.hi
- *		(SP - 2) <- PC.lo
- *		SP <- SP + 2
- *		PC <- addr
+ *		A <- A ^ REGISTER
+ *
+ * FLAGS:
+ *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
  */
-void call(CPUState *state, unsigned char *opcode);
+void xra(CPUState *state, uint8_t *reg);
 
 /**
- * Performs a RET (return) instruction.
+ * Performs a CPI (compare immediate with A) operation.
  *
  * RTN:
- *		PC.lo <- (SP)
- *		PC.hi <- (SP + 1)
- *		SP <- SP + 2
+ *		A - data
+ *
+ * FLAGS:
+ *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
  */
-void ret(CPUState *state);
+void cpi(CPUState *state, unsigned char *opcode);
+
+/*
+ * Performs an RRC instruction.
+ *
+ * RRC rotates the A register right.
+ *
+ * RTN:
+ *		A = A >> 1
+ *		bit 7 = previous bit
+ *		CY = previous bit 0
+ *
+ * FLAGS:
+ *		Carry (CY)
+ */
+void rrc(CPUState *state);

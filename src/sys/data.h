@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include "cpu.h"
+#include "sys/cpu.h"
 
 #include <stdint.h>
 
