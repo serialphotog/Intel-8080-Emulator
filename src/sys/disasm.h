@@ -26,7 +26,10 @@
  *
  ******************************************************************************/
 
-#pragma once
+#ifndef __EMU_DISASM_H__
+#define __EMU_DISASM_H__
 
  // Disassembles a CPU instruction for debugging
 int disassembleInstruction(unsigned char *buffer, int pc);
+
+#endif

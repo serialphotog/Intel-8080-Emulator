@@ -26,7 +26,8 @@
  *
  ******************************************************************************/
 
-#pragma once
+#ifndef __EMU_TIME_H__
+#define __EMU_TIME_H__
 
 #ifdef _Win32
 
@@ -55,3 +56,4 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
 }
 
 #endif // _Win32
+#endif // __EMU_TIME_H__

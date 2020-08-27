@@ -26,10 +26,13 @@
  *
  ******************************************************************************/
 
-#pragma once
+#ifndef __EMU_DECODER_H__
+#define __EMU_DECODER_H__
 
  // Gets called when an unimplemented instruction is encountered
 void unimplementedInstruction(CPUState *state, unsigned char *opcode);
 
 // Decodes CPU instructions
 int decode(CPUState *state);
+
+#endif

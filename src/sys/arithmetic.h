@@ -26,7 +26,8 @@
  *
  ******************************************************************************/
 
-#pragma once
+#ifndef __EMU_ARITHMETIC_H__
+#define __EMU_ARITHMETIC_H__
 
 #include "sys/cpu.h"
 
@@ -91,3 +92,5 @@ void inx(uint8_t *reg1, uint8_t *reg2);
  *		Zero (Z), Sign (S), Parity (P), Auxilary Carry (AC)
  */
 void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode);
+
+#endif

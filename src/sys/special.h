@@ -26,7 +26,8 @@
  *
  ******************************************************************************/
 
-#pragma once
+#ifndef __EMU_SPECIAL_H__
+#define __EMU_SPECIAL_H__
 
 #include "sys/cpu.h"
 
@@ -45,3 +46,5 @@ void out(CPUState *state);
  * This mearly sets a flag in the CPU state
  */
 void ei(CPUState *state);
+
+#endif

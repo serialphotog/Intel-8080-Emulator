@@ -26,7 +26,8 @@
  *
  ******************************************************************************/
 
-#pragma once
+#ifndef __EMU_LOGIC_H__
+#define __EMU_LOGIC_H__
 
 #include "sys/cpu.h"
 
@@ -96,3 +97,5 @@ void cpi(CPUState *state, unsigned char *opcode);
  *		Carry (CY)
  */
 void rrc(CPUState *state);
+
+#endif

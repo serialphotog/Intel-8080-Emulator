@@ -26,7 +26,8 @@
  *
  ******************************************************************************/
 
-#pragma once
+#ifndef __EMU_DATA_H__
+#define __EMU_DATA_H__
 
 #include "sys/cpu.h"
 
@@ -175,3 +176,5 @@ void pop_psw(CPUState *state);
  *		L <-> E
  */
 void xchg(CPUState *state);
+
+#endif

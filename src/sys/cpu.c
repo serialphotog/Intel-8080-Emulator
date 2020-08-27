@@ -26,8 +26,6 @@
  *
  ******************************************************************************/
 
-#define _CRT_SECURE_NO_WARNINGS // Stop visual studio from complaining about insecure functions
-
 #include "sys/cpu.h"
 
 #include "sys/decoder.h"

@@ -26,7 +26,8 @@
  *
  ******************************************************************************/
 
-#pragma once
+#ifndef __EMU_BRANCH_H__
+#define __EMU_BRANCH_H__
 
 #include "sys/cpu.h"
 
@@ -69,3 +70,5 @@ void call(CPUState *state, unsigned char *opcode);
  *		SP <- SP + 2
  */
 void ret(CPUState *state);
+
+#endif
