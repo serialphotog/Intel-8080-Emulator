@@ -27,12 +27,16 @@
  ******************************************************************************/
 
 #include "cpu.h"
-#include "display.h"
 
-#include "time.h"
+#ifdef _Win32
+  #include "time.h"
+  #include<Windows.h>
+#else
+  #include<sys/time.h>
+  #include<pthread.h>
+#endif
 
 #include <stdio.h>
-#include <Windows.h>
 
 // Gets the current time in milliseconds
 double getTimeMilliseconds()
@@ -43,7 +47,7 @@ double getTimeMilliseconds()
 }
 
 // Runs the CPU run thread
-DWORD WINAPI emulatorThreadFunc(void *data)
+void emulatorThread(void *data)
 {
 	// Initialize the CPU state
 	CPUState *state = (CPUState*)data;
@@ -73,9 +77,19 @@ DWORD WINAPI emulatorThreadFunc(void *data)
 			}
 		}
 	}
-
-	return 0;
 }
+
+#ifdef _Win32
+DWORD WINAPI emulatorThreadFunc(void *data)
+{
+  emulatorThread(data);
+}
+#else
+void* emulatorThreadFunc(void *data)
+{
+  emulatorThread(data);
+}
+#endif
 
 // Let's do this!
 int main(int argc, char **argv)
@@ -84,25 +98,25 @@ int main(int argc, char **argv)
 	CPUState *state = InitCPUState();
 
 	// Load test code into memory
-	loadFileIntoMemoryAtOffset(state, "../invaders.h", 0);
-	loadFileIntoMemoryAtOffset(state, "../invaders.g", 0x800);
-	loadFileIntoMemoryAtOffset(state, "../invaders.f", 0x1000);
-	loadFileIntoMemoryAtOffset(state, "../invaders.e", 0x1800);
+	loadFileIntoMemoryAtOffset(state, "../rom/invaders.h", 0);
+	loadFileIntoMemoryAtOffset(state, "../rom/invaders.g", 0x800);
+	loadFileIntoMemoryAtOffset(state, "../rom/invaders.f", 0x1000);
+	loadFileIntoMemoryAtOffset(state, "../rom/invaders.e", 0x1800);
 
 	// Do the run thread
+#ifdef _Win32
 	HANDLE runThread = CreateThread(NULL, 0, emulatorThreadFunc, state, 0, NULL);
+#else
+  pthread_t runThread;
+  pthread_create(&runThread, NULL, emulatorThreadFunc, state);
+#endif
 
-	// Setup the display
-	DisplayState *displayState = initDisplay();
-	runDisplay(displayState);
-
+#ifdef _Win32
 	if (runThread) 
 	{
 		WaitForSingleObject(runThread, INFINITE);
 	}
-
-	// Perform cleanup
-	destroyDisplay(displayState);
+#endif
 
 	return 0;
 }

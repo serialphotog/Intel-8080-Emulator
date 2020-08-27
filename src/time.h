@@ -1,5 +1,5 @@
 /*******************************************************************************
- * File: time.c
+ * File: time.h
  *
  * Purpose:
  *		Provides an equivilant of the *nix interface for working with time.
@@ -26,26 +26,29 @@
  *
  ******************************************************************************/
 
-#include "time.h"
+#pragma once
 
-#include <stdint.h>
+#include <Windows.h>
 
-// Gets the current time of day
+/**
+ * Provides an equivilant of the *nix API for getting the current time of day.
+*/
 int gettimeofday(struct timeval *tp, struct timezone *tzp)
 {
-	// Time since the EPOCH
-	static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);
+  // Time since the EPOCH
+  static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);
 
-	SYSTEMTIME  system_time;
-	FILETIME    file_time;
-	uint64_t    time;
+  SYSTEMTIME  system_time;
+  FILETIME    file_time;
+  uint64_t    time;
 
-	GetSystemTime(&system_time);
-	SystemTimeToFileTime(&system_time, &file_time);
-	time = ((uint64_t)file_time.dwLowDateTime);
-	time += ((uint64_t)file_time.dwHighDateTime) << 32;
+  GetSystemTime(&system_time);
+  SystemTimeToFileTime(&system_time, &file_time);
+  time = ((uint64_t)file_time.dwLowDateTime);
+  time += ((uint64_t)file_time.dwHighDateTime) << 32;
 
-	tp->tv_sec = (long)((time - EPOCH) / 10000000L);
-	tp->tv_usec = (long)(system_time.wMilliseconds * 1000);
-	return 0;
+  tp->tv_sec = (long)((time - EPOCH) / 10000000L);
+  tp->tv_usec = (long)(system_time.wMilliseconds * 1000);
+  return 0;
 }
+
