@@ -28,6 +28,8 @@
 
 #include "sys/cpu.h"
 
+#include "display/display.h"
+
 #ifdef _Win32
   #include "time.h"
   #include <Windows.h>
@@ -117,6 +119,12 @@ int main(int argc, char **argv)
 		WaitForSingleObject(runThread, INFINITE);
 	}
 #endif
+
+	// Set up the display
+	GtkApplication *app = gtk_application_new("com.hackeradam.emulator", G_APPLICATION_FLAGS_NONE);
+	g_signal_connect(app, "activate", G_CALLBACK(initializeWindow), state);
+	int status = g_application_run(G_APPLICATION(app), argc, argv);
+	g_object_unref(app);
 
 	return 0;
 }
