@@ -13,4 +13,4 @@ set (EMU_SRCS
 include_directories(.)
 
 add_executable(${PROJECT_NAME} ${EMU_SRCS})
-target_link_libraries(${PROJECT_NAME} Threads::Threads ${GTK3_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} Threads::Threads ${GTK3_LIBRARIES} ${OPENGL_LIBRARIES})

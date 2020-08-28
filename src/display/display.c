@@ -28,22 +28,56 @@
 
 #include "display/display.h"
 
+#include <GL/gl.h>
 #include <stdlib.h>
+
+// Initializes OpenGL
+static void initGL(GtkWidget *glarea, gpointer data)
+{
+	DisplayState *displayState = (DisplayState*) data;
+	gtk_gl_area_make_current(GTK_GL_AREA(glarea));
+
+	// TODO: shaders
+}
+
+// Renders the view contents
+static gboolean render(GtkGLArea *glarea, GdkGLContext *context, gpointer data)
+{
+	DisplayState *displayState = (DisplayState*) data;
+	CPUState *state = displayState->state;
+
+	// Clear the buffer
+	glClearColor(0, 0, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// TODO: Draw stuff!
+
+	return TRUE;
+}
 
 void initializeWindow(GtkApplication *app, gpointer userData)
 {
-	GtkWidget *window;
+	GtkWidget *window = gtk_application_window_new(app);
+	GtkWidget *glarea;
 	CPUState *state;
 
 	// Initialize the display state
 	DisplayState *displayState = (DisplayState*) malloc(sizeof(DisplayState));
 	displayState->state = state;
 
-	// TODO: Initialize OpenGL
+	// Initialize Open GL
+	glarea = gtk_gl_area_new();
+	gtk_gl_area_set_auto_render((GtkGLArea*) glarea, GL_FALSE);
+	g_signal_connect(glarea, "realize", G_CALLBACK(initGL), displayState);
+	g_signal_connect(glarea, "render", G_CALLBACK(render), displayState);
+	gtk_container_add(GTK_CONTAINER(window), glarea);
 
-	window = gtk_application_window_new(app);
+	// Window properties
 	gtk_window_set_title(GTK_WINDOW(window), "Intel 8080 Emulator"); // TODO: Possibly make this state dependent?
 	gtk_window_set_default_size(GTK_WINDOW(window), 300, 200);
 	g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 	gtk_widget_show_all(window);
+
+	// Run the main GTK loop
+	gtk_main();
 }
