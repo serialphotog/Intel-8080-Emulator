@@ -1,5 +1,5 @@
 /*******************************************************************************
- * File: arithmetic.h
+ * File: main.c
  *
  * Purpose:
  *		A software emulator for the Intel 8080 CPU.
