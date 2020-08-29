@@ -71,4 +71,12 @@ void call(CPUState *state, unsigned char *opcode);
  */
 void ret(CPUState *state);
 
+/**
+ * Performs a RZ (return if zero) instruction
+ *
+ * RTN:
+ *		If Z, RET
+ */
+void rz(CPUState *state);
+
 #endif

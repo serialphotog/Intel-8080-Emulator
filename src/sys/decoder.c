@@ -839,7 +839,7 @@ int decode(CPUState *state)
 		break;
 	case 0xc8:
 		// RZ
-		unimplementedInstruction(state, opcode);
+		rz(state);
 		break;
 	case 0xc9:
 		// RET

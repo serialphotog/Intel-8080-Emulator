@@ -66,3 +66,12 @@ void ret(CPUState *state)
 		(fetchFromMemory(state->memory, state->sp + 1) << 8);
 	state->sp += 2;
 }
+
+// RZ (return is zero)
+void rz(CPUState *state)
+{
+	if (state->cc.z)
+	{
+		ret(state);
+	}
+}
