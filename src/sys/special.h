@@ -41,6 +41,13 @@
 void out(CPUState *state);
 
 /**
+ * Perfroms an IN operation.
+ * NOTE: I'm not currently sure the best way to implement this. This is currently
+ * just a stub implmentation to allow execution to continue.
+ */
+void in(CPUState *state);
+
+/**
  * Performs an EI (enable interrupts) operation.
  *
  * This mearly sets a flag in the CPU state

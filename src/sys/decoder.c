@@ -907,7 +907,7 @@ int decode(CPUState *state)
 		break;
 	case 0xdb:
 		// IN D8
-		unimplementedInstruction(state, opcode);
+		in(state);
 		break;
 	case 0xdc:
 		// CC adr

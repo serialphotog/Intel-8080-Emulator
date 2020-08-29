@@ -35,6 +35,13 @@ void out(CPUState *state)
 	state->pc++;
 }
 
+// IN
+void in(CPUState* state)
+{
+	// TODO: Implement this. For now, just continue executing
+	state->pc++;
+}
+
 // EI (enable interrupts)
 void ei(CPUState *state)
 {
