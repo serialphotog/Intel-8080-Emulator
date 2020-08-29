@@ -7,10 +7,11 @@ set (EMU_SRCS
   sys/disasm.c
   sys/logic.c
   sys/special.c
+  display/shader.c
   display/display.c
   main.c
 )
 include_directories(.)
 
 add_executable(${PROJECT_NAME} ${EMU_SRCS})
-target_link_libraries(${PROJECT_NAME} Threads::Threads ${GTK3_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} Threads::Threads ${GTK3_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})

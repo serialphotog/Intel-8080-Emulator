@@ -26,9 +26,9 @@
  *
  ******************************************************************************/
 
+#include "display/shader.h"
 #include "display/display.h"
 
-#include <GL/gl.h>
 #include <stdlib.h>
 
 // Initializes OpenGL
@@ -37,7 +37,49 @@ static void initGL(GtkWidget *glarea, gpointer data)
 	DisplayState *displayState = (DisplayState*) data;
 	gtk_gl_area_make_current(GTK_GL_AREA(glarea));
 
-	// TODO: shaders
+	glewExperimental = GL_TRUE; 
+	glewInit();
+
+	// Initialize the vertex buffer
+	glGenVertexArrays(1, &displayState->glVertexBuffer);
+	glBindVertexArray(displayState->glVertexBuffer);
+
+	// Load the shaders
+	displayState->glProgramID = loadShaders("shader.vertex", "shader.fragment");
+
+	// Textures
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, COLS, ROWS, 0, GL_RGB, GL_UNSIGNED_BYTE, displayState->image);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    float verticies[] = {
+    	1.0f,  1.0f, 0.0f,   1.0f, 1.0f,   // top right
+        1.0f, -1.0f, 0.0f,   0.0f, 1.0f,   // bottom right
+       -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,   // bottom left
+       -1.0f,  1.0f, 0.0f,   1.0f, 0.0f    // top left
+   };
+
+   unsigned int indices[] = {
+   		0, 1, 3,
+   		1, 2, 3
+   };
+
+   glGenBuffers(1, &displayState->glVertexBuffer);
+   glBindBuffer(GL_ARRAY_BUFFER, displayState->glVertexBuffer);
+   glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+   glEnableVertexAttribArray(0);
+   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+   glEnableVertexAttribArray(1);
+
+   glGenBuffers(1, &displayState->glElementBuffer);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, displayState->glElementBuffer);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+   displayState->glTextureID = textureID;
 }
 
 // Renders the view contents
@@ -49,8 +91,26 @@ static gboolean render(GtkGLArea *glarea, GdkGLContext *context, gpointer data)
 	// Clear the buffer
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glUseProgram(displayState->glProgramID);
 
-	// TODO: Draw stuff!
+	// Draw the contents from the machines video memory
+for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < 32; j++) 
+		{
+			for (int k = 0; k < 8; ++k)
+			{
+				displayState->image[(i * COLS + j) + k + (j * 8)] = (displayState->state->memory[0x2400 + i * 32 + j] & (1 << k)) == 0 ? 0 : 255;
+			}
+		}
+	}
+
+	glBindTexture(GL_TEXTURE_2D, displayState->glTextureID);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, COLS, ROWS, GL_LUMINANCE, GL_UNSIGNED_BYTE, displayState->image);
+
+	glBindVertexArray(displayState->glVertexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, displayState->glElementBuffer);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	return TRUE;
 }
@@ -59,7 +119,7 @@ void initializeWindow(GtkApplication *app, gpointer userData)
 {
 	GtkWidget *window = gtk_application_window_new(app);
 	GtkWidget *glarea;
-	CPUState *state;
+	CPUState *state = userData;
 
 	// Initialize the display state
 	DisplayState *displayState = (DisplayState*) malloc(sizeof(DisplayState));

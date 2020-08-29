@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: display.h
+ * File: shader.h
  *
  * Purpose:
- *		Provides the display architecture for the emulator.
+ *		Handles OpenGL shader programs.
  *
  * Copyright 2020 Adam Thompson <adam@serialphotog.com>
  *
@@ -26,28 +26,13 @@
  *
  ******************************************************************************/
 
-#ifndef __EMU_DISPLAY_H__
-#define __EMU_DISPLAY_H__
+#ifndef __EMU_SHADER_H__
+#define __EMU_SHADER_H__
 
-#define COLS 256
-#define ROWS 224
-
-#include "sys/cpu.h"
-
+#include <GL/glew.h>
 #include <GL/gl.h>
-#include <gtk/gtk.h>
 
-// Stores the state of the system's display
-typedef struct DisplayState {
-	CPUState *state; // The state of the CPU
-	GLuint glProgramID; // The OpenGL program ID
-	GLuint glVertexBuffer; // The vertex buffer for OpenGL rendering
-	GLuint glElementBuffer; // The element buffer for OpenGL rendering
-	GLuint glTextureID; // The texture ID for OpenGL rendering
-	char image[ROWS * COLS]; // The image reference
-} DisplayState;
-
-// Initializes the applicaiton window
-void initializeWindow(GtkApplication *app, gpointer userData);
+// Loads the vertex and fragment shaders from disk
+GLuint loadShaders(const char *vertexPath, const char *fragmentPath);
 
 #endif
