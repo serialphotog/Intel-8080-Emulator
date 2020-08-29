@@ -903,7 +903,7 @@ int decode(CPUState *state)
 		break;
 	case 0xda:
 		// JC adr 
-		unimplementedInstruction(state, opcode);
+		jc(state, opcode);
 		break;
 	case 0xdb:
 		// IN D8

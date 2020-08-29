@@ -79,4 +79,12 @@ void ret(CPUState *state);
  */
 void rz(CPUState *state);
 
+/**
+ * Performs a JC (jump if carry) instruction
+ *
+ * RTN:
+ *		If CY, PC <- addr
+ */
+void jc(CPUState *state, unsigned char *opcode);
+
 #endif
