@@ -88,3 +88,16 @@ void jc(CPUState *state, unsigned char *opcode)
 		state->pc += 2;
 	}
 }
+
+// JZ (jump if zero)
+void jz(CPUState *state, unsigned char *opcode)
+{
+	if (state->cc.z)
+	{
+		state->pc = (opcode[2] << 8 | opcode [1]);
+	}
+	else
+	{
+		state->pc += 2;
+	}
+}

@@ -847,7 +847,7 @@ int decode(CPUState *state)
 		break;
 	case 0xca:
 		// JZ adr
-		unimplementedInstruction(state, opcode);
+		jz(state, opcode);
 		break;
 	case 0xcc:
 		// CZ adr

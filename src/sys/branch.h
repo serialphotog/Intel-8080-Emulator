@@ -87,4 +87,12 @@ void rz(CPUState *state);
  */
 void jc(CPUState *state, unsigned char *opcode);
 
+/**
+ * Performs a JZ (jump if zero) instruciton
+ *
+ * RTN:
+ *		If Z, PC <- addr
+ */
+void jz(CPUState *state, unsigned char *opcode);
+
 #endif
