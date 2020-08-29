@@ -93,4 +93,15 @@ void inx(uint8_t *reg1, uint8_t *reg2);
  */
 void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode);
 
+/**
+ * Performs a DCR (decrement register or memory) operation
+ *
+ * RTN:
+ *    (HL) <- (HL) - 1
+ *
+ * FLAGS:
+ *    Zero (Z), Sign (S), Parity (P), Auxilary Carry (AC)
+ */
+void dcr_m(CPUState *state);
+
 #endif

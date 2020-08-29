@@ -255,7 +255,7 @@ int decode(CPUState *state)
 		break;
 	case 0x35:
 		// DCR M
-		unimplementedInstruction(state, opcode);
+		dcr_m(state);
 		break;
 	case 0x36:
 		// MVI M, D8

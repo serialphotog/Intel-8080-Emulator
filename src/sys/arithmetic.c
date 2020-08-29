@@ -80,3 +80,13 @@ void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode)
 	state->cc.p = calculateParity(res, 8);
 	*reg = res;
 }
+
+void dcr_m(CPUState *state)
+{
+	uint8_t offs = (state->h << 8) | state->l;
+	uint8_t result = state->memory[offs] - 1;
+	state->cc.z = (result == 0);
+	state->cc.s = (0x80 == (result && 0x80));
+	state->cc.p = calculateParity(result, 8);
+	state->memory[offs] = result;
+}
