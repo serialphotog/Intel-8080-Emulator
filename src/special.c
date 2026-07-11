@@ -32,6 +32,8 @@
 void out(CPUState *state)
 {
 	uint8_t port = state->memory[state->pc];
+	if (port < sizeof(state->output_ports))
+		state->output_ports[port] = state->a;
 	if (port == 2)
 		state->shift_offset = state->a & 7;
 	else if (port == 4)

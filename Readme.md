@@ -12,6 +12,9 @@ Press `C` or `5` to insert a coin, then `1` to start one player or `2` to
 start two players. Use Left/Right and Space for player one; A/D and Up control
 player two. Escape closes the emulator.
 
+Sound is generated through SDL from the original cabinet's output-port signals;
+no external sample files are required.
+
 ## License
 
 Copyright 2018-2026 Adam Thompson <adam@hackeradam.com>

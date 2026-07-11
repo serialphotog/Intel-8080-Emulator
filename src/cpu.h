@@ -55,6 +55,7 @@ typedef struct CPUState {
 	struct ConditionCodes cc; // CPU Flags
 	uint8_t int_enable; // Tracks if interrupts are enables or disabled
 	uint8_t input_ports[4];
+	uint8_t output_ports[8];
 	uint16_t shift_register;
 	uint8_t shift_offset;
 	uint8_t running;
