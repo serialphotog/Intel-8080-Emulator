@@ -1,8 +1,8 @@
 /*******************************************************************************
- * File: time.h
+ * File: platform.h
  *
  * Purpose:
- *		Provides an equivalent of the *nix interface for working with time.
+ *		Provides the platform layer for the emulator.
  *
  * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
@@ -28,27 +28,10 @@
 
 #pragma once
 
-#include <Windows.h>
+#include "cpu.h"
 
-/**
- * Provides an equivilant of the *nix API for getting the current time of day.
-*/
-int gettimeofday(struct timeval *tp, struct timezone *tzp)
-{
-  // Time since the EPOCH
-  static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);
+typedef struct Platform Platform;
 
-  SYSTEMTIME  system_time;
-  FILETIME    file_time;
-  uint64_t    time;
-
-  GetSystemTime(&system_time);
-  SystemTimeToFileTime(&system_time, &file_time);
-  time = ((uint64_t)file_time.dwLowDateTime);
-  time += ((uint64_t)file_time.dwHighDateTime) << 32;
-
-  tp->tv_sec = (long)((time - EPOCH) / 10000000L);
-  tp->tv_usec = (long)(system_time.wMilliseconds * 1000);
-  return 0;
-}
-
+Platform *platform_create(void);
+int platform_update(Platform *platform, CPUState *state);
+void platform_destroy(Platform *platform);

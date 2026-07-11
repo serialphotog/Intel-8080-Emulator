@@ -4,7 +4,7 @@
  * Purpose:
  *		Specification for the data control operations performed by the CPU.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -118,6 +118,18 @@ void ldax(uint8_t *a, uint8_t *hi, uint8_t *lo, uint8_t *memory,
 void sta(CPUState *state, unsigned char *opcode);
 
 /**
+ * Stores L at the addressed byte and H at the following byte.
+ *
+ * RTN:
+ *      (addr) <- L
+ *      (addr + 1) <- H
+ */
+void shld(CPUState *state, unsigned char *opcode);
+
+/** Loads L from the addressed byte and H from the following byte. */
+void lhld(CPUState *state, unsigned char *opcode);
+
+/**
  * Performs a PUSH instruction.
  *
  * Pushes a value onto the stack
@@ -175,3 +187,6 @@ void pop_psw(CPUState *state);
  *		L <-> E
  */
 void xchg(CPUState *state);
+
+/** Exchanges HL with the 16-bit value at the top of the stack. */
+void xthl(CPUState *state);

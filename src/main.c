@@ -1,10 +1,7 @@
 /*******************************************************************************
- * File: arithmetic.h
+ * File: main.c
  *
- * Purpose:
- *		A software emulator for the Intel 8080 CPU.
- *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT .IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -27,96 +24,59 @@
  ******************************************************************************/
 
 #include "cpu.h"
+#include "platform.h"
 
-#ifdef _Win32
-  #include "time.h"
-  #include<Windows.h>
-#else
-  #include<sys/time.h>
-  #include<pthread.h>
-#endif
-
+#include <SDL.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-// Gets the current time in milliseconds
-double getTimeMilliseconds()
+static void load_roms(CPUState *state, const char *directory)
 {
-	struct timeval currentTime;
-	gettimeofday(&currentTime, NULL);
-	return ((double)currentTime.tv_sec * 1E6) + ((double)currentTime.tv_usec);
-}
-
-// Runs the CPU run thread
-void emulatorThread(void *data)
-{
-	// Initialize the CPU state
-	CPUState *state = (CPUState*)data;
-
-	int complete = 0;
-	double timeNow;
-	int interrupt = 1;
-	double previousInterrupt = 0.0;
-
-	while (complete == 0) 
-	{
-		complete = runCPUCycle(state);
-		timeNow = getTimeMilliseconds();
-
-		// Handle interrupts
-		if (timeNow - previousInterrupt > 16667) // if 1/60 of a second has elapsed
-		{
-			// We only want to perform an interrupt when they are enabled
-			if (state->int_enable)
-			{
-				if (interrupt == 1)
-					interrupt = 2;
-				if (interrupt == 2)
-					interrupt = 1;
-				raiseInterrupt(state, 2);
-				previousInterrupt = timeNow;
-			}
-		}
+	static const char *names[] = { "invaders.h", "invaders.g", "invaders.f", "invaders.e" };
+	char path[1024];
+	for (int i = 0; i < 4; ++i) {
+		snprintf(path, sizeof(path), "%s/%s", directory, names[i]);
+		loadFileIntoMemoryAtOffset(state, path, (uint32_t)i * 0x800);
 	}
 }
 
-#ifdef _Win32
-DWORD WINAPI emulatorThreadFunc(void *data)
-{
-  emulatorThread(data);
-}
-#else
-void* emulatorThreadFunc(void *data)
-{
-  emulatorThread(data);
-}
-#endif
-
-// Let's do this!
 int main(int argc, char **argv)
 {
-	// Initialize the CPU state
 	CPUState *state = InitCPUState();
+	Platform *platform;
+	/* Toggle to RST 1 at mid-frame, then RST 2 at vertical blank. */
+	int interrupt = 2;
 
-	// Load test code into memory
-	loadFileIntoMemoryAtOffset(state, "../rom/invaders.h", 0);
-	loadFileIntoMemoryAtOffset(state, "../rom/invaders.g", 0x800);
-	loadFileIntoMemoryAtOffset(state, "../rom/invaders.f", 0x1000);
-	loadFileIntoMemoryAtOffset(state, "../rom/invaders.e", 0x1800);
-
-	// Do the run thread
-#ifdef _Win32
-	HANDLE runThread = CreateThread(NULL, 0, emulatorThreadFunc, state, 0, NULL);
-#else
-  pthread_t runThread;
-  pthread_create(&runThread, NULL, emulatorThreadFunc, state);
-#endif
-
-#ifdef _Win32
-	if (runThread) 
-	{
-		WaitForSingleObject(runThread, INFINITE);
+	load_roms(state, argc > 1 ? argv[1] : "../rom");
+	platform = platform_create();
+	if (!platform) {
+		fprintf(stderr, "Unable to initialize SDL: %s\n", SDL_GetError());
+		return EXIT_FAILURE;
 	}
-#endif
 
-	return 0;
+	while (state->running) {
+		uint64_t frame_start = SDL_GetPerformanceCounter();
+		/* About 2 MHz at the 8080's typical instruction length. */
+		for (int instruction = 0; instruction < 7000 && state->running; ++instruction) {
+			runCPUCycle(state);
+			if (instruction == 3499 || instruction == 6999) {
+				if (state->int_enable) {
+					interrupt = (interrupt == 1) ? 2 : 1;
+					raiseInterrupt(state, interrupt);
+				}
+			}
+		}
+		state->running = (uint8_t)platform_update(platform, state);
+		{
+			uint64_t elapsed = SDL_GetPerformanceCounter() - frame_start;
+			uint64_t frame = SDL_GetPerformanceFrequency() / 60;
+			if (elapsed < frame)
+				SDL_Delay((uint32_t)((frame - elapsed) * 1000 / SDL_GetPerformanceFrequency()));
+		}
+	}
+
+	platform_destroy(platform);
+	free(state->memory);
+	free(state);
+	return EXIT_SUCCESS;
 }

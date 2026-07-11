@@ -5,7 +5,7 @@
  *		The various data control operations performed by the CPU. These include
  *		instructions that move data between registers and memory.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -100,6 +100,24 @@ void sta(CPUState *state, unsigned char *opcode)
 	state->pc += 2;
 }
 
+// SHLD (store H and L direct)
+void shld(CPUState *state, unsigned char *opcode)
+{
+	uint16_t address = buildMemoryOffset(opcode[2], opcode[1]);
+	setMemoryOffset(state->memory, address, state->l);
+	setMemoryOffset(state->memory, (uint16_t)(address + 1), state->h);
+	state->pc += 2;
+}
+
+// LHLD (load H and L direct)
+void lhld(CPUState *state, unsigned char *opcode)
+{
+	uint16_t address = buildMemoryOffset(opcode[2], opcode[1]);
+	state->l = fetchFromMemory(state->memory, address);
+	state->h = fetchFromMemory(state->memory, (uint16_t)(address + 1));
+	state->pc += 2;
+}
+
 // PUSH 
 void push(uint8_t *hi, uint8_t *lo, uint16_t *sp, uint8_t *memory)
 {
@@ -137,4 +155,14 @@ void xchg(CPUState *state)
 {
 	swapRegisters(&state->h, &state->d);
 	swapRegisters(&state->l, &state->e);
+}
+
+void xthl(CPUState *state)
+{
+	uint8_t old_l = state->l;
+	uint8_t old_h = state->h;
+	state->l = fetchFromMemory(state->memory, state->sp);
+	state->h = fetchFromMemory(state->memory, (uint16_t)(state->sp + 1));
+	setMemoryOffset(state->memory, state->sp, old_l);
+	setMemoryOffset(state->memory, (uint16_t)(state->sp + 1), old_h);
 }

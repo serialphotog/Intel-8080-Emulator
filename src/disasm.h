@@ -4,7 +4,7 @@
  * Purpose:
  *		Specification for the disassembler.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

@@ -4,7 +4,7 @@
  * Purpose:
  *		Specification for the arithmetic operations performed by the CPU.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +45,12 @@
   */
 void adi(CPUState *state, unsigned char *opcode);
 
+/** Adds value and optional carry to A, updating all arithmetic flags. */
+void add(CPUState *state, uint8_t value, uint8_t carry);
+
+/** Decimal-adjusts A after packed-BCD addition. */
+void daa(CPUState *state);
+
 /**
  * Performs a DAD (direct add) instruction.
  *
@@ -81,6 +87,12 @@ void dad_h(uint8_t *h, uint8_t *l, CPUState *state);
  */
 void inx(uint8_t *reg1, uint8_t *reg2);
 
+/** Decrements a 16-bit register pair without affecting flags. */
+void dcx(uint8_t *high, uint8_t *low);
+
+/** Increments an 8-bit value and updates every affected flag except Carry. */
+void inr(CPUState *state, uint8_t *value);
+
 /**
  * Performs a DCR (decrement register) operation
  *
@@ -91,3 +103,6 @@ void inx(uint8_t *reg1, uint8_t *reg2);
  *		Zero (Z), Sign (S), Parity (P), Auxilary Carry (AC)
  */
 void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode);
+
+/** Subtracts value and an optional borrow from A, updating all arithmetic flags. */
+void sub(CPUState *state, uint8_t value, uint8_t borrow);

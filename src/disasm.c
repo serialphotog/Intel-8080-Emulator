@@ -4,7 +4,7 @@
  * Purpose:
  *		Disassembles CPU instructions into human readable form.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -141,7 +141,7 @@ int disassembleInstruction(unsigned char *buffer, int pc)
 		printf("RAR");
 		break;
 	case 0x20:
-		printf("RIM");
+		printf("NOP");
 		break;
 	case 0x21:
 		printf("LXI\tH, #$0x%02x%02x", opcode[2], opcode[1]);
@@ -191,7 +191,7 @@ int disassembleInstruction(unsigned char *buffer, int pc)
 		printf("CMA");
 		break;
 	case 0x30:
-		printf("SIM");
+		printf("NOP");
 		break;
 	case 0x31:
 		printf("LXI\tSP, #$0x%02x%02x", opcode[2], opcode[1]);
@@ -799,7 +799,7 @@ int disassembleInstruction(unsigned char *buffer, int pc)
 		printf("PUSH\tPSW");
 		break;
 	case 0xf6:
-		printf("ORD\t#$0x%02x", opcode[1]);
+		printf("ORI\t#$0x%02x", opcode[1]);
 		opbytes = 2;
 		break;
 	case 0xf7:

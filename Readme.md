@@ -6,9 +6,15 @@ This is a very much work in progress emulator for the Intel 8080 microprocessor.
 
 If you decide to play with this you'll notice that it's currently hardcoded to load a space invaders ROM. These ROM files are not included in the public release of this code due to intellectual property issues. It'll be up to you to find the ROM files if you decide to play with this.
 
+## Controls
+
+Press `C` or `5` to insert a coin, then `1` to start one player or `2` to
+start two players. Use Left/Right and Space for player one; A/D and Up control
+player two. Escape closes the emulator.
+
 ## License
 
-Copyright 2018 Adam Thompson <adam@serialphotog.com>
+Copyright 2018-2026 Adam Thompson <adam@hackeradam.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

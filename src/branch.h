@@ -4,7 +4,7 @@
  * Purpose:
  *		Specification of the various branching statements supported by the CPU.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,6 +49,9 @@ void jmp(CPUState *state, unsigned char *opcode);
  */
 void jnz(CPUState *state, unsigned char *opcode);
 
+/** Performs a conditional absolute jump and consumes its address operand. */
+void conditional_jump(CPUState *state, unsigned char *opcode, int condition);
+
 /**
  * Performs a CALL (unconditional call) operation.
  *
@@ -60,6 +63,9 @@ void jnz(CPUState *state, unsigned char *opcode);
  */
 void call(CPUState *state, unsigned char *opcode);
 
+/** Calls an absolute address when condition is true, otherwise skips it. */
+void conditional_call(CPUState *state, unsigned char *opcode, int condition);
+
 /**
  * Performs a RET (return) instruction.
  *
@@ -69,3 +75,6 @@ void call(CPUState *state, unsigned char *opcode);
  *		SP <- SP + 2
  */
 void ret(CPUState *state);
+
+/** Returns when condition is true; otherwise continues at the next opcode. */
+void conditional_ret(CPUState *state, int condition);

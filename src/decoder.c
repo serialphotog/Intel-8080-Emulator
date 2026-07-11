@@ -4,7 +4,7 @@
  * Purpose:
  *		Decodes instructions and calls the functional implementations.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,7 +52,9 @@ int decode(CPUState *state)
 	case 0x08:
 	case 0x10:
 	case 0x18:
+	case 0x20:
 	case 0x28:
+	case 0x30:
 	case 0x38:
 	case 0xcb:
 	case 0xd9:
@@ -75,7 +77,7 @@ int decode(CPUState *state)
 		break;
 	case 0x04:
 		// INR B
-		unimplementedInstruction(state, opcode);
+		inr(state, &state->b);
 		break;
 	case 0x05:
 		// DCR B
@@ -87,7 +89,7 @@ int decode(CPUState *state)
 		break;
 	case 0x07:
 		// RLC
-		unimplementedInstruction(state, opcode);
+		rlc(state);
 		break;
 	case 0x09:
 		// DAD B
@@ -99,11 +101,11 @@ int decode(CPUState *state)
 		break;
 	case 0x0b:
 		// DCX B
-		unimplementedInstruction(state, opcode);
+		dcx(&state->b, &state->c);
 		break;
 	case 0x0c:
 		// INR C
-		unimplementedInstruction(state, opcode);
+		inr(state, &state->c);
 		break;
 	case 0x0d:
 		// DCR C
@@ -131,7 +133,7 @@ int decode(CPUState *state)
 		break;
 	case 0x14:
 		// INR D
-		unimplementedInstruction(state, opcode);
+		inr(state, &state->d);
 		break;
 	case 0x15:
 		// DCR D
@@ -143,7 +145,7 @@ int decode(CPUState *state)
 		break;
 	case 0x17:
 		// RAL
-		unimplementedInstruction(state, opcode);
+		ral(state);
 		break;
 	case 0x19:
 		// DAD D
@@ -155,11 +157,11 @@ int decode(CPUState *state)
 		break;
 	case 0x1b:
 		// DCX D
-		unimplementedInstruction(state, opcode);
+		dcx(&state->d, &state->e);
 		break;
 	case 0x1c:
 		// INR E
-		unimplementedInstruction(state, opcode);
+		inr(state, &state->e);
 		break;
 	case 0x1d:
 		// DCR E
@@ -171,11 +173,7 @@ int decode(CPUState *state)
 		break;
 	case 0x1f:
 		// RAR
-		unimplementedInstruction(state, opcode);
-		break;
-	case 0x20:
-		// RIM
-		unimplementedInstruction(state, opcode);
+		rar(state);
 		break;
 	case 0x21:
 		// LXI H, D16
@@ -183,7 +181,7 @@ int decode(CPUState *state)
 		break;
 	case 0x22:
 		// SHLD adr
-		unimplementedInstruction(state, opcode);
+		shld(state, opcode);
 		break;
 	case 0x23:
 		// INX H
@@ -191,7 +189,7 @@ int decode(CPUState *state)
 		break;
 	case 0x24:
 		// INR H
-		unimplementedInstruction(state, opcode);
+		inr(state, &state->h);
 		break;
 	case 0x25:
 		// DCR H
@@ -203,7 +201,7 @@ int decode(CPUState *state)
 		break;
 	case 0x27:
 		// DAA
-		unimplementedInstruction(state, opcode);
+		daa(state);
 		break;
 	case 0x29:
 		// DAD H
@@ -211,15 +209,15 @@ int decode(CPUState *state)
 		break;
 	case 0x2a:
 		// LHLD adr
-		unimplementedInstruction(state, opcode);
+		lhld(state, opcode);
 		break;
 	case 0x2b:
 		// DCX H
-		unimplementedInstruction(state, opcode);
+		dcx(&state->h, &state->l);
 		break;
 	case 0x2c:
 		// INR L
-		unimplementedInstruction(state, opcode);
+		inr(state, &state->l);
 		break;
 	case 0x2d:
 		// DCR L
@@ -231,11 +229,7 @@ int decode(CPUState *state)
 		break;
 	case 0x2f:
 		// CMA
-		unimplementedInstruction(state, opcode);
-		break;
-	case 0x30:
-		// SIM
-		unimplementedInstruction(state, opcode);
+		state->a = (uint8_t)~state->a;
 		break;
 	case 0x31:
 		// LXI SP, D16
@@ -247,15 +241,15 @@ int decode(CPUState *state)
 		break;
 	case 0x33:
 		// INX SP
-		unimplementedInstruction(state, opcode);
+		state->sp = (uint16_t)(state->sp + 1);
 		break;
 	case 0x34:
 		// INR M
-		unimplementedInstruction(state, opcode);
+		inr(state, &state->memory[buildMemoryOffset(state->h, state->l)]);
 		break;
 	case 0x35:
 		// DCR M
-		unimplementedInstruction(state, opcode);
+		dcr(state, &state->memory[buildMemoryOffset(state->h, state->l)], opcode);
 		break;
 	case 0x36:
 		// MVI M, D8
@@ -263,11 +257,16 @@ int decode(CPUState *state)
 		break;
 	case 0x37:
 		// STC
-		unimplementedInstruction(state, opcode);
+		state->cc.cy = 1;
 		break;
 	case 0x39:
 		// DAD SP
-		unimplementedInstruction(state, opcode);
+		{
+			uint32_t result = (uint32_t)build2ByteValue(state->h, state->l) + state->sp;
+			state->h = (uint8_t)(result >> 8);
+			state->l = (uint8_t)result;
+			state->cc.cy = (result > 0xffff);
+		}
 		break;
 	case 0x3a:
 		// LDA adr
@@ -275,11 +274,11 @@ int decode(CPUState *state)
 		break;
 	case 0x3b:
 		// DCX SP
-		unimplementedInstruction(state, opcode);
+		state->sp = (uint16_t)(state->sp - 1);
 		break;
 	case 0x3c:
 		// INR A
-		unimplementedInstruction(state, opcode);
+		inr(state, &state->a);
 		break;
 	case 0x3d:
 		// DCR A
@@ -511,7 +510,7 @@ int decode(CPUState *state)
 		break;
 	case 0x76:
 		// HLT
-		unimplementedInstruction(state, opcode);
+		state->halted = 1;
 		break;
 	case 0x77:
 		// MOV M, A
@@ -551,131 +550,131 @@ int decode(CPUState *state)
 		break;
 	case 0x80:
 		// ADD B
-		unimplementedInstruction(state, opcode);
+		add(state, state->b, 0);
 		break;
 	case 0x81:
 		// ADD C
-		unimplementedInstruction(state, opcode);
+		add(state, state->c, 0);
 		break;
 	case 0x82:
 		// ADD D
-		unimplementedInstruction(state, opcode);
+		add(state, state->d, 0);
 		break;
 	case 0x83:
 		// ADD E
-		unimplementedInstruction(state, opcode);
+		add(state, state->e, 0);
 		break;
 	case 0x84:
 		// ADD H
-		unimplementedInstruction(state, opcode);
+		add(state, state->h, 0);
 		break;
 	case 0x85:
 		// ADD L
-		unimplementedInstruction(state, opcode);
+		add(state, state->l, 0);
 		break;
 	case 0x86:
 		// ADD M
-		unimplementedInstruction(state, opcode);
+		add(state, fetchFromMemory(state->memory, buildMemoryOffset(state->h, state->l)), 0);
 		break;
 	case 0x87:
 		// ADD A
-		unimplementedInstruction(state, opcode);
+		add(state, state->a, 0);
 		break;
 	case 0x88:
 		// ADC B
-		unimplementedInstruction(state, opcode);
+		add(state, state->b, state->cc.cy);
 		break;
 	case 0x89:
 		// ADC C
-		unimplementedInstruction(state, opcode);
+		add(state, state->c, state->cc.cy);
 		break;
 	case 0x8a:
 		// ADC D
-		unimplementedInstruction(state, opcode);
+		add(state, state->d, state->cc.cy);
 		break;
 	case 0x8b:
 		// ADC E
-		unimplementedInstruction(state, opcode);
+		add(state, state->e, state->cc.cy);
 		break;
 	case 0x8c:
 		// ADC H
-		unimplementedInstruction(state, opcode);
+		add(state, state->h, state->cc.cy);
 		break;
 	case 0x8d:
 		// ADC L
-		unimplementedInstruction(state, opcode);
+		add(state, state->l, state->cc.cy);
 		break;
 	case 0x8e:
 		// ADC M
-		unimplementedInstruction(state, opcode);
+		add(state, fetchFromMemory(state->memory, buildMemoryOffset(state->h, state->l)), state->cc.cy);
 		break;
 	case 0x8f:
 		// ADC A
-		unimplementedInstruction(state, opcode);
+		add(state, state->a, state->cc.cy);
 		break;
 	case 0x90:
 		// SUB B
-		unimplementedInstruction(state, opcode);
+		sub(state, state->b, 0);
 		break;
 	case 0x91:
 		// SUB C
-		unimplementedInstruction(state, opcode);
+		sub(state, state->c, 0);
 		break;
 	case 0x92:
 		// SUB D
-		unimplementedInstruction(state, opcode);
+		sub(state, state->d, 0);
 		break;
 	case 0x93:
 		// SUB E
-		unimplementedInstruction(state, opcode);
+		sub(state, state->e, 0);
 		break;
 	case 0x94:
 		// SUB H
-		unimplementedInstruction(state, opcode);
+		sub(state, state->h, 0);
 		break;
 	case 0x95:
 		// SUB L
-		unimplementedInstruction(state, opcode);
+		sub(state, state->l, 0);
 		break;
 	case 0x96:
 		// SUB M
-		unimplementedInstruction(state, opcode);
+		sub(state, fetchFromMemory(state->memory, buildMemoryOffset(state->h, state->l)), 0);
 		break;
 	case 0x97:
 		// SUB A
-		unimplementedInstruction(state, opcode);
+		sub(state, state->a, 0);
 		break;
 	case 0x98:
 		// SBB B
-		unimplementedInstruction(state, opcode);
+		sub(state, state->b, state->cc.cy);
 		break;
 	case 0x99:
 		// SBB C
-		unimplementedInstruction(state, opcode);
+		sub(state, state->c, state->cc.cy);
 		break;
 	case 0x9a:
 		// SBB D
-		unimplementedInstruction(state, opcode);
+		sub(state, state->d, state->cc.cy);
 		break;
 	case 0x9b:
 		// SBB E
-		unimplementedInstruction(state, opcode);
+		sub(state, state->e, state->cc.cy);
 		break;
 	case 0x9c:
 		// SBB H
-		unimplementedInstruction(state, opcode);
+		sub(state, state->h, state->cc.cy);
 		break;
 	case 0x9d:
-		// SBB I
-		unimplementedInstruction(state, opcode);
+		// SBB L
+		sub(state, state->l, state->cc.cy);
 		break;
 	case 0x9e:
 		// SBB M
-		unimplementedInstruction(state, opcode);
+		sub(state, fetchFromMemory(state->memory, buildMemoryOffset(state->h, state->l)), state->cc.cy);
 		break;
 	case 0x9f:
 		// SBB A
-		unimplementedInstruction(state, opcode);
+		sub(state, state->a, state->cc.cy);
 		break;
 	case 0xa0:
 		// ANA B
@@ -703,7 +702,10 @@ int decode(CPUState *state)
 		break;
 	case 0xa6:
 		// ANA M
-		unimplementedInstruction(state, opcode);
+		{
+			uint8_t value = fetchFromMemory(state->memory, buildMemoryOffset(state->h, state->l));
+			ana(state, &value);
+		}
 		break;
 	case 0xa7:
 		// ANA A
@@ -735,7 +737,10 @@ int decode(CPUState *state)
 		break;
 	case 0xae:
 		// XRA M
-		unimplementedInstruction(state, opcode);
+		{
+			uint8_t value = fetchFromMemory(state->memory, buildMemoryOffset(state->h, state->l));
+			xra(state, &value);
+		}
 		break;
 	case 0xaf:
 		// XRA A
@@ -743,71 +748,71 @@ int decode(CPUState *state)
 		break;
 	case 0xb0:
 		// ORA B
-		unimplementedInstruction(state, opcode);
+		ora(state, state->b);
 		break;
 	case 0xb1:
 		// ORA C
-		unimplementedInstruction(state, opcode);
+		ora(state, state->c);
 		break;
 	case 0xb2:
 		// ORA D
-		unimplementedInstruction(state, opcode);
+		ora(state, state->d);
 		break;
 	case 0xb3:
 		// ORA E
-		unimplementedInstruction(state, opcode);
+		ora(state, state->e);
 		break;
 	case 0xb4:
 		// ORA H
-		unimplementedInstruction(state, opcode);
+		ora(state, state->h);
 		break;
 	case 0xb5:
 		// ORA L
-		unimplementedInstruction(state, opcode);
+		ora(state, state->l);
 		break;
 	case 0xb6:
 		// ORA M
-		unimplementedInstruction(state, opcode);
+		ora(state, fetchFromMemory(state->memory, buildMemoryOffset(state->h, state->l)));
 		break;
 	case 0xb7:
 		// ORA A
-		unimplementedInstruction(state, opcode);
+		ora(state, state->a);
 		break;
 	case 0xb8:
 		// CMP B
-		unimplementedInstruction(state, opcode);
+		cmp(state, state->b);
 		break;
 	case 0xb9:
 		// CMP C
-		unimplementedInstruction(state, opcode);
+		cmp(state, state->c);
 		break;
 	case 0xba:
 		// CMP D
-		unimplementedInstruction(state, opcode);
+		cmp(state, state->d);
 		break;
 	case 0xbb:
 		// CMP E
-		unimplementedInstruction(state, opcode);
+		cmp(state, state->e);
 		break;
 	case 0xbc:
 		// CMP H
-		unimplementedInstruction(state, opcode);
+		cmp(state, state->h);
 		break;
 	case 0xbd:
 		// CMP L
-		unimplementedInstruction(state, opcode);
+		cmp(state, state->l);
 		break;
 	case 0xbe:
 		// CMP M
-		unimplementedInstruction(state, opcode);
+		cmp(state, fetchFromMemory(state->memory, buildMemoryOffset(state->h, state->l)));
 		break;
 	case 0xbf:
 		// CMP A
-		unimplementedInstruction(state, opcode);
+		cmp(state, state->a);
 		break;
 	case 0xc0:
 		// RNZ
-		unimplementedInstruction(state, opcode);
+		conditional_ret(state, !state->cc.z);
 		break;
 	case 0xc1:
 		// POP B
@@ -823,7 +828,7 @@ int decode(CPUState *state)
 		break;
 	case 0xc4:
 		// CNZ adr
-		unimplementedInstruction(state, opcode);
+		conditional_call(state, opcode, !state->cc.z);
 		break;
 	case 0xc5:
 		// PUSH B
@@ -839,7 +844,7 @@ int decode(CPUState *state)
 		break;
 	case 0xc8:
 		// RZ
-		unimplementedInstruction(state, opcode);
+		conditional_ret(state, state->cc.z);
 		break;
 	case 0xc9:
 		// RET
@@ -847,11 +852,11 @@ int decode(CPUState *state)
 		break;
 	case 0xca:
 		// JZ adr
-		unimplementedInstruction(state, opcode);
+		conditional_jump(state, opcode, state->cc.z);
 		break;
 	case 0xcc:
 		// CZ adr
-		unimplementedInstruction(state, opcode);
+		conditional_call(state, opcode, state->cc.z);
 		break;
 	case 0xcd:
 		// CALL adr
@@ -859,7 +864,11 @@ int decode(CPUState *state)
 		break;
 	case 0xce:
 		// ACI D8
-		unimplementedInstruction(state, opcode);
+		{
+			uint8_t carry = state->cc.cy;
+			add(state, opcode[1], carry);
+			state->pc++;
+		}
 		break;
 	case 0xcf:
 		// RST 1
@@ -867,7 +876,7 @@ int decode(CPUState *state)
 		break;
 	case 0xd0:
 		// RNC
-		unimplementedInstruction(state, opcode);
+		conditional_ret(state, !state->cc.cy);
 		break;
 	case 0xd1:
 		// POP D
@@ -875,7 +884,7 @@ int decode(CPUState *state)
 		break;
 	case 0xd2:
 		// JNC adr
-		unimplementedInstruction(state, opcode);
+		conditional_jump(state, opcode, !state->cc.cy);
 		break;
 	case 0xd3:
 		// OUT D8
@@ -883,7 +892,7 @@ int decode(CPUState *state)
 		break;
 	case 0xd4:
 		// CNC adr
-		unimplementedInstruction(state, opcode);
+		conditional_call(state, opcode, !state->cc.cy);
 		break;
 	case 0xd5:
 		// PUSH D
@@ -891,7 +900,8 @@ int decode(CPUState *state)
 		break;
 	case 0xd6:
 		// SUI D8
-		unimplementedInstruction(state, opcode);
+		sub(state, opcode[1], 0);
+		state->pc++;
 		break;
 	case 0xd7:
 		// RST 2
@@ -899,23 +909,27 @@ int decode(CPUState *state)
 		break;
 	case 0xd8:
 		// RC
-		unimplementedInstruction(state, opcode);
+		conditional_ret(state, state->cc.cy);
 		break;
 	case 0xda:
 		// JC adr 
-		unimplementedInstruction(state, opcode);
+		conditional_jump(state, opcode, state->cc.cy);
 		break;
 	case 0xdb:
 		// IN D8
-		unimplementedInstruction(state, opcode);
+		in(state);
 		break;
 	case 0xdc:
 		// CC adr
-		unimplementedInstruction(state, opcode);
+		conditional_call(state, opcode, state->cc.cy);
 		break;
 	case 0xde:
 		// SBI D8
-		unimplementedInstruction(state, opcode);
+		{
+			uint8_t borrow = state->cc.cy;
+			sub(state, opcode[1], borrow);
+			state->pc++;
+		}
 		break;
 	case 0xdf:
 		// RST 3
@@ -923,7 +937,7 @@ int decode(CPUState *state)
 		break;
 	case 0xe0:
 		// RPO
-		unimplementedInstruction(state, opcode);
+		conditional_ret(state, !state->cc.p);
 		break;
 	case 0xe1:
 		// POP H
@@ -931,15 +945,15 @@ int decode(CPUState *state)
 		break;
 	case 0xe2:
 		// JPO adr
-		unimplementedInstruction(state, opcode);
+		conditional_jump(state, opcode, !state->cc.p);
 		break;
 	case 0xe3:
 		// XTHL
-		unimplementedInstruction(state, opcode);
+		xthl(state);
 		break;
 	case 0xe4:
 		// CPO adr
-		unimplementedInstruction(state, opcode);
+		conditional_call(state, opcode, !state->cc.p);
 		break;
 	case 0xe5:
 		// PUSH H
@@ -955,15 +969,15 @@ int decode(CPUState *state)
 		break;
 	case 0xe8:
 		// RPE
-		unimplementedInstruction(state, opcode);
+		conditional_ret(state, state->cc.p);
 		break;
 	case 0xe9:
 		// PCHL
-		unimplementedInstruction(state, opcode);
+		state->pc = build2ByteValue(state->h, state->l);
 		break;
 	case 0xea:
 		// JPE adr
-		unimplementedInstruction(state, opcode);
+		conditional_jump(state, opcode, state->cc.p);
 		break;
 	case 0xeb:
 		// XCHG
@@ -971,7 +985,7 @@ int decode(CPUState *state)
 		break;
 	case 0xec:
 		// CPE adr
-		unimplementedInstruction(state, opcode);
+		conditional_call(state, opcode, state->cc.p);
 		break;
 	case 0xee:
 		// XRI D8
@@ -983,7 +997,7 @@ int decode(CPUState *state)
 		break;
 	case 0xf0:
 		// RP
-		unimplementedInstruction(state, opcode);
+		conditional_ret(state, !state->cc.s);
 		break;
 	case 0xf1:
 		// POP PSW
@@ -991,7 +1005,7 @@ int decode(CPUState *state)
 		break;
 	case 0xf2:
 		// JP adr
-		unimplementedInstruction(state, opcode);
+		conditional_jump(state, opcode, !state->cc.s);
 		break;
 	case 0xf3:
 		// DI
@@ -999,7 +1013,7 @@ int decode(CPUState *state)
 		break;
 	case 0xf4:
 		// CP adr 
-		unimplementedInstruction(state, opcode);
+		conditional_call(state, opcode, !state->cc.s);
 		break;
 	case 0xf5:
 		// PUSH PSW
@@ -1007,7 +1021,8 @@ int decode(CPUState *state)
 		break;
 	case 0xf6:
 		// ORI D8
-		unimplementedInstruction(state, opcode);
+		ora(state, opcode[1]);
+		state->pc++;
 		break;
 	case 0xf7:
 		// RST 6
@@ -1015,15 +1030,15 @@ int decode(CPUState *state)
 		break;
 	case 0xf8:
 		// RM
-		unimplementedInstruction(state, opcode);
+		conditional_ret(state, state->cc.s);
 		break;
 	case 0xf9:
 		// SPHL
-		unimplementedInstruction(state, opcode);
+		state->sp = build2ByteValue(state->h, state->l);
 		break;
 	case 0xfa:
 		// JM adr
-		unimplementedInstruction(state, opcode);
+		conditional_jump(state, opcode, state->cc.s);
 		break;
 	case 0xfb:
 		// EI
@@ -1031,7 +1046,7 @@ int decode(CPUState *state)
 		break;
 	case 0xfc:
 		// CM adr
-		unimplementedInstruction(state, opcode);
+		conditional_call(state, opcode, state->cc.s);
 		break;
 	case 0xfe:
 		// CPI D8

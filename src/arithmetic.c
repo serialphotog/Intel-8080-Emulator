@@ -4,7 +4,7 @@
  * Purpose:
  *		The various arithmetic operations supported by the Intel 8080 CPU.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,15 +31,42 @@
  // ADI (add immediate)
 void adi(CPUState *state, unsigned char *opcode)
 {
-	// Note, we cast the value to 16-bits for higher precision. This is sow we
-	// can capture the carry out value.
-	uint16_t res = (uint16_t)state->a + (uint16_t)opcode[1];
-	state->a = (uint8_t)res;
-	state->cc.z = ((res & 0xff) == 0);
-	state->cc.s = ((res & 0x80) == 0x80);
-	state->cc.p = calculateParity((res & 0xff), 8);
-	state->cc.cy = (res > 0xff);
+	add(state, opcode[1], 0);
 	state->pc++;
+}
+
+void add(CPUState *state, uint8_t value, uint8_t carry)
+{
+	uint8_t before = state->a;
+	uint16_t result = (uint16_t)before + value + carry;
+	state->a = (uint8_t)result;
+	state->cc.z = (state->a == 0);
+	state->cc.s = ((state->a & 0x80) != 0);
+	state->cc.p = calculateParity(state->a, 8);
+	state->cc.cy = (result > 0xff);
+	state->cc.ac = (((before & 0x0f) + (value & 0x0f) + carry) > 0x0f);
+}
+
+// DAA (decimal adjust accumulator)
+void daa(CPUState *state)
+{
+	uint8_t before = state->a;
+	uint8_t correction = 0;
+	uint8_t carry = state->cc.cy;
+	uint16_t result;
+
+	if ((before & 0x0f) > 9 || state->cc.ac)
+		correction |= 0x06;
+	if (before > 0x99 || carry)
+		correction |= 0x60;
+
+	result = (uint16_t)before + correction;
+	state->a = (uint8_t)result;
+	state->cc.z = (state->a == 0);
+	state->cc.s = ((state->a & 0x80) != 0);
+	state->cc.p = calculateParity(state->a, 8);
+	state->cc.ac = (((before & 0x0f) + (correction & 0x0f)) > 0x0f);
+	state->cc.cy = (carry || result > 0xff);
 }
 
 // DAD (direct add)
@@ -71,12 +98,47 @@ void inx(uint8_t *reg1, uint8_t *reg2)
 		(*reg1)++;
 }
 
+void dcx(uint8_t *high, uint8_t *low)
+{
+	uint16_t value = build2ByteValue(*high, *low);
+	value = (uint16_t)(value - 1);
+	*high = (uint8_t)(value >> 8);
+	*low = (uint8_t)value;
+}
+
+// INR (increment register or memory byte)
+void inr(CPUState *state, uint8_t *value)
+{
+	uint8_t before = *value;
+	uint8_t result = (uint8_t)(before + 1);
+	state->cc.z = (result == 0);
+	state->cc.s = ((result & 0x80) != 0);
+	state->cc.p = calculateParity(result, 8);
+	state->cc.ac = ((before & 0x0f) == 0x0f);
+	*value = result;
+}
+
 // DCR (decrement register)
 void dcr(CPUState *state, uint8_t *reg, unsigned char *opcode)
 {
-	uint8_t res = *reg - 1;
+	uint8_t before = *reg;
+	uint8_t res = (uint8_t)(before - 1);
 	state->cc.z = (res == 0);
 	state->cc.s = ((res & 0x80) == 0x80);
 	state->cc.p = calculateParity(res, 8);
+	state->cc.ac = ((before & 0x0f) == 0);
 	*reg = res;
+}
+
+void sub(CPUState *state, uint8_t value, uint8_t borrow)
+{
+	uint8_t before = state->a;
+	uint16_t operand = (uint16_t)value + borrow;
+	uint8_t result = (uint8_t)(before - operand);
+	state->a = result;
+	state->cc.z = (result == 0);
+	state->cc.s = ((result & 0x80) != 0);
+	state->cc.p = calculateParity(result, 8);
+	state->cc.cy = ((uint16_t)before < operand);
+	state->cc.ac = ((before & 0x0f) < ((value & 0x0f) + borrow));
 }

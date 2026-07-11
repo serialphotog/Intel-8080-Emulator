@@ -5,7 +5,7 @@
  *		The various branch instructions supported by the Intel 8080. These
  *		include calls such as jumps and calls.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,6 +46,14 @@ void jnz(CPUState *state, unsigned char *opcode)
 		state->pc += 2;
 }
 
+void conditional_jump(CPUState *state, unsigned char *opcode, int condition)
+{
+	if (condition)
+		jmp(state, opcode);
+	else
+		state->pc += 2;
+}
+
 // CALL (unconditional call)
 void call(CPUState *state, unsigned char *opcode)
 {
@@ -59,10 +67,24 @@ void call(CPUState *state, unsigned char *opcode)
 	jmp(state, opcode);
 }
 
+void conditional_call(CPUState *state, unsigned char *opcode, int condition)
+{
+	if (condition)
+		call(state, opcode);
+	else
+		state->pc += 2;
+}
+
 // RET (return)
 void ret(CPUState *state)
 {
 	state->pc = fetchFromMemory(state->memory, state->sp) |
 		(fetchFromMemory(state->memory, state->sp + 1) << 8);
 	state->sp += 2;
+}
+
+void conditional_ret(CPUState *state, int condition)
+{
+	if (condition)
+		ret(state);
 }

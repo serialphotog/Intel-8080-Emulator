@@ -4,7 +4,7 @@
  * Purpose:
  *		Specification for the various logical operations supported by the CPU.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -71,6 +71,9 @@ void ani(CPUState *state, unsigned char *opcode);
  */
 void xra(CPUState *state, uint8_t *reg);
 
+/** ORs an 8-bit value into A and updates the logical-operation flags. */
+void ora(CPUState *state, uint8_t value);
+
 /**
  * Performs a CPI (compare immediate with A) operation.
  *
@@ -81,6 +84,9 @@ void xra(CPUState *state, uint8_t *reg);
  *		Zero (Z), Sign (S), Parity (P), Carry (CY), Auxilary Carry (AC)
  */
 void cpi(CPUState *state, unsigned char *opcode);
+
+/** Compares A with a value by setting subtraction flags without changing A. */
+void cmp(CPUState *state, uint8_t value);
 
 /*
  * Performs an RRC instruction.
@@ -96,3 +102,12 @@ void cpi(CPUState *state, unsigned char *opcode);
  *		Carry (CY)
  */
 void rrc(CPUState *state);
+
+/** Rotates A left, copying bit 7 to bit 0 and Carry. */
+void rlc(CPUState *state);
+
+/** Rotates A left through Carry. */
+void ral(CPUState *state);
+
+/** Rotates A right through Carry. */
+void rar(CPUState *state);

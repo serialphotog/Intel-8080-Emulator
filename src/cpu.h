@@ -5,7 +5,7 @@
  *		Specification for the base data structures and operations supported by
  *		the CPU.
  *
- * Copyright 2018 Adam Thompson <adam@serialphotog.com>
+ * Copyright 2018, 2026 Adam Thompson <adam@hackeradam.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -54,6 +54,11 @@ typedef struct CPUState {
 	uint8_t *memory;
 	struct ConditionCodes cc; // CPU Flags
 	uint8_t int_enable; // Tracks if interrupts are enables or disabled
+	uint8_t input_ports[4];
+	uint16_t shift_register;
+	uint8_t shift_offset;
+	uint8_t running;
+	uint8_t halted;
 } CPUState;
 
 /**
